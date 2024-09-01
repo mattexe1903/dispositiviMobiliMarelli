@@ -22,36 +22,39 @@ class RegistrationActivity : AppCompatActivity() {
         binding = ActivityRegistrationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         db = WorkoutDatabaseHelper(this)
-
-        //firebaseAuth = FirebaseAuth.getInstance()
+        firebaseAuth = FirebaseAuth.getInstance()
 
         registerAccount()
-
     }
 
-    private fun registerAccount(){
-        binding.signupBt.setOnClickListener{
-            val email = binding.edEmail.text.toString()
-            val password = binding.edPasswordSU.text.toString()
-            if(email.isNotEmpty() && password.isNotEmpty()){
-                firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{
-                    if(it.isSuccessful){
-                        val user = firebaseAuth.currentUser
-                        val uid = user?.uid
-                        Toast.makeText(this, "User ID: $uid", Toast.LENGTH_SHORT).show()
-                        saveOperatorInfo(uid.toString())
-                        val intent = Intent(this, HomeActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    } else {
-                        Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
+    private fun registerAccount() {
+        binding.signupBt.setOnClickListener {
+            val email = binding.edEmail.text.toString().trim()
+            val password = binding.edPasswordSU.text.toString().trim()
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                firebaseAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val user = firebaseAuth.currentUser
+                            val uid = user?.uid
+                            Toast.makeText(this, "User ID: $uid", Toast.LENGTH_SHORT).show()
+                            saveOperatorInfo(uid.toString())
+                            val intent = Intent(this, HomeActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            Toast.makeText(this, task.exception?.message ?: "Registration failed", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }
+                    .addOnFailureListener { exception ->
+                        Toast.makeText(this, exception.message, Toast.LENGTH_SHORT).show()
+                    }
             } else {
                 Toast.makeText(this, "Fields cannot be empty", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
     private fun saveOperatorInfo(uid:String){
         val name = binding.edName.text.toString()
