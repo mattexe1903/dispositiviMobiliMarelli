@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "49042921977",
+    "project_id": "ptlproject-7433d",
+    "storage_bucket": "ptlproject-7433d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:49042921977:android:7822594276d465f2960528",
+        "android_client_info": {
+          "package_name": "com.example.loginui"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCI6q4vvFsg2PcNw-_89_nHcR_lL8JsWUc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
