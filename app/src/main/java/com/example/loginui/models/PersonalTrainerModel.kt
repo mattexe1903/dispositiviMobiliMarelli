@@ -1,7 +1,7 @@
 package com.example.loginui.models
 
 data class PersonalTrainerModel (
-    val id: Int,
+    val uid: String,
     val name: String,
     val surname: String
 )

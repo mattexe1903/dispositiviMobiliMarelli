@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.example.loginui.models.RPRModel
 import com.example.loginui.models.ClientModel
+import com.example.loginui.models.PersonalTrainerModel
 import com.example.loginui.models.TrainingDetailsModel
 import com.example.loginui.models.TrainingModel
 
@@ -195,6 +196,16 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
             put(COLUMN_TD_EXTIME, trainingDetails.executionTime)
         }
         db.insert(TABLE_TRAININGDETAILS, null, values)
+        db.close()
+    }
+
+    fun insertOperator(personalTrainerMode: PersonalTrainerModel){
+        val db=writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_OP_NAME, personalTrainerMode.name)
+            put(COLUMN_OP_UID, personalTrainerMode.uid)
+        }
+        db.insert(TABLE_OPERATOR, null, values)
         db.close()
     }
 
