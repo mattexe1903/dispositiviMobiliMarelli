@@ -60,23 +60,27 @@
         app:layout_constraintStart_toStartOf="@+id/daySinceLastWorkout"
         app:layout_constraintTop_toBottomOf="@+id/daySinceLastWorkout" />
 
-    <ImageView
+    <ToggleButton
         android:id="@+id/toggleButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginEnd="28dp"
+        android:background="@drawable/extend_window"
+        android:checked="false"
         android:clickable="true"
+        android:textOff=""
+        android:textOn=""
         app:layout_constraintBottom_toBottomOf="@+id/rprSummary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rprSummary"
-        app:srcCompat="@drawable/extend_window" />
+        app:layout_constraintTop_toTopOf="@+id/rprSummary" />
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardRprSummary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:cardBackgroundColor="@color/blue"
         app:layout_constraintBottom_toTopOf="@+id/borg"
         app:layout_constraintTop_toBottomOf="@+id/rprSummary"

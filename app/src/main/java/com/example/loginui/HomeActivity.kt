@@ -14,7 +14,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var db: WorkoutDatabaseHelper
     private lateinit var authManager: AuthManager
-    private lateinit var trainingsAdapter: TrainingAdapter
+    private lateinit var workoutSummaryAdapter: WorkoutSummaryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,10 +22,10 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
         db = WorkoutDatabaseHelper(this)
         authManager = AuthManager()
-        trainingsAdapter = TrainingAdapter(db.getLastFiveTraining(), this)
+        workoutSummaryAdapter = WorkoutSummaryAdapter(db.getLastFiveTraining(), this)
 
         binding.trainingsRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.trainingsRecyclerView.adapter = trainingsAdapter
+        binding.trainingsRecyclerView.adapter = workoutSummaryAdapter
 
         searchUser()
         setupUI()
@@ -49,12 +49,12 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        trainingsAdapter.refreshData(db.getLastFiveTraining())
+        workoutSummaryAdapter.refreshData(db.getLastFiveTraining())
     }
 
     private fun searchUser(){
         val editExercise = this.findViewById<AutoCompleteTextView>(R.id.searchUser)
-        val users = db.getUsersName(" ")
+        val users = db.getUsersName("")
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, users)
         editExercise.setAdapter(adapter)
     }
