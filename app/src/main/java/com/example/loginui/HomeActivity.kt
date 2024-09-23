@@ -2,13 +2,12 @@ package com.example.loginui
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.loginui.databinding.ActivityHomeBinding
 import com.example.loginui.manager.AuthManager
-import com.example.loginui.models.TrainingModel
 
 class HomeActivity : AppCompatActivity() {
 
@@ -28,6 +27,7 @@ class HomeActivity : AppCompatActivity() {
         binding.trainingsRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.trainingsRecyclerView.adapter = trainingsAdapter
 
+        searchUser()
         setupUI()
         setupListeners()
     }
@@ -50,5 +50,12 @@ class HomeActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         trainingsAdapter.refreshData(db.getLastFiveTraining())
+    }
+
+    private fun searchUser(){
+        val editExercise = this.findViewById<AutoCompleteTextView>(R.id.searchUser)
+        val users = db.getUsersName(" ")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, users)
+        editExercise.setAdapter(adapter)
     }
 }

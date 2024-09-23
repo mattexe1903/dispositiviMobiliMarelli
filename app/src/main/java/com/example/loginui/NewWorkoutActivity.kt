@@ -4,16 +4,13 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import com.example.loginui.databinding.ActivityNewWorkoutBinding
 import com.example.loginui.manager.AuthManager
 import com.example.loginui.models.RPRModel
@@ -53,22 +50,11 @@ class NewWorkoutActivity : AppCompatActivity() {
     private fun addNewBoxInContainer(){
         binding.buttonAddExercise.setOnClickListener {
             val newBox = LayoutInflater.from(this).inflate(R.layout.exercise_box, binding.container, false)
-            val newWorkoutSummary  = LayoutInflater.from(this).inflate(R.layout.workout_summary, binding.container, false)
             val editExercise = newBox.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
 
-            val cardRprSummary = newWorkoutSummary.findViewById<CardView>(R.id.cardRprSummary)
-            val toggleButton = newWorkoutSummary.findViewById<ImageView>(R.id.toggleButton)
-            val exercises = db.getExerciseNames("")
+            val exercises = db.getExercisesName("")
             val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, exercises)
             editExercise.setAdapter(adapter)
-
-            toggleButton.setOnClickListener {
-                if (cardRprSummary.visibility == View.GONE) {
-                    cardRprSummary.visibility = View.VISIBLE
-                } else {
-                    cardRprSummary.visibility = View.GONE
-                }
-            }
 
             binding.container.addView(newBox)
         }
@@ -102,7 +88,7 @@ class NewWorkoutActivity : AppCompatActivity() {
 
             if(userId!= "null"){
                 val trainingId = db.countTrainingRows()+1
-                val trainingModel = TrainingModel(trainingId, "data", "30:00", userId, ptId.toString())
+                val trainingModel = TrainingModel(trainingId, "data", "duration", userId, ptId.toString())
                 db.insertTraining(trainingModel)
                 
                 val mood = binding.edMoodValue.text.toString()

@@ -1,8 +1,8 @@
 package com.example.loginui
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
@@ -250,7 +250,7 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         return id
     }
 
-    fun getExerciseNames(query: String): List<String> {
+    fun getExercisesName(query: String): List<String> {
         val db = this.readableDatabase
         val selection = "name LIKE ?"
         val selectionArgs = arrayOf("%$query%")
@@ -263,15 +263,39 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
             null,
             null
         )
-        val exerciseNames = mutableListOf<String>()
+        val exercisesName = mutableListOf<String>()
         with(cursor) {
             while (moveToNext()) {
                 val name = getString(getColumnIndexOrThrow("name"))
-                exerciseNames.add(name)
+                exercisesName.add(name)
             }
         }
         cursor.close()
-        return exerciseNames
+        return exercisesName
+    }
+
+    fun getUsersName(query: String): List<String> {
+        val db = this.readableDatabase
+        val selection = "name LIKE ? OR surname LIKE ? OR (name || ' ' || surname) LIKE ?"
+        val selectionArgs = arrayOf("%$query%", "%$query%", "%$query%")
+        val cursor = db.query(
+            "client",
+            arrayOf("name", "surname"),
+            selection,
+            selectionArgs,
+            null,
+            null,
+            null
+        )
+        val usersName = mutableListOf<String>()
+        with(cursor) {
+            while (moveToNext()) {
+                val fullName = getString(getColumnIndexOrThrow("name")) + " " + getString(getColumnIndexOrThrow("surname"))
+                usersName.add(fullName)
+            }
+        }
+        cursor.close()
+        return usersName
     }
 
     fun countTrainingRows(): Int{
