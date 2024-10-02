@@ -335,12 +335,33 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         val query = "SELECT * FROM $TABLE_TRAINING ORDER BY $COLUMN_TRAINING_ID DESC LIMIT 5"
         val cursor = db.rawQuery(query, null)
         while (cursor.moveToNext()) {
-            val trainingId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_ID))
-            val clientId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_CLIENT))
-            val date = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_DATE))
-            val duration = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_DURATION))
-            val personalTrainerId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_PT))
-            val training = TrainingModel(trainingId, date, duration, clientId.toString(), personalTrainerId.toString())
+            val training = TrainingModel(
+                cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_ID)),
+                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_DATE)),
+                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_DURATION)),
+                cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_CLIENT)).toString(),
+                cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_PT)).toString()
+            )
+            trainingList.add(training)
+        }
+        cursor.close()
+        db.close()
+        return trainingList
+    }
+
+    fun getTrainingByClientId(id: String): List<TrainingModel> {
+        val trainingList = mutableListOf<TrainingModel>()
+        val db = readableDatabase
+        val query = "SELECT * FROM $TABLE_TRAINING WHERE client=?"
+        val cursor = db.rawQuery(query, arrayOf(id))
+        while (cursor.moveToNext()) {
+            val training = TrainingModel(
+                cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_ID)),
+                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_DATE)),
+                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_DURATION)),
+                cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_CLIENT)).toString(),
+                cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_PT)).toString()
+            )
             trainingList.add(training)
         }
         cursor.close()
@@ -365,5 +386,29 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
             cursor.close()
         }
         return client
+    }
+
+    fun getRprByTrainingId(trainingId: String): List<RPRModel> {
+        val db = readableDatabase
+        val rprList = mutableListOf<RPRModel>()
+        val query = "SELECT * FROM $TABLE_RPR WHERE training=?"
+        val cursor = db.rawQuery(query, arrayOf(trainingId))
+        while(cursor.moveToNext()){
+            val rprModel = RPRModel(
+                cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RPR_ID)),
+                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RPR_CLIENT)),
+                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RPR_MOOD)),
+                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RPR_SLEEP)),
+                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RPR_ENERGY)),
+                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RPR_DOMS)),
+                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RPR_AVG)),
+                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RPR_BORG)),
+                cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RPR_TRAINING))
+            )
+            rprList.add(rprModel)
+        }
+        cursor.close()
+        db.close()
+        return rprList
     }
 }

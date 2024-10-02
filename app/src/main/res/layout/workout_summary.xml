@@ -91,7 +91,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/energyValue"
+                android:id="@+id/energy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -103,7 +103,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/moodValue"
+                android:id="@+id/mood"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -111,8 +111,8 @@
                 android:text="mood:"
                 android:textColor="@color/white"
                 android:textSize="25sp"
-                app:layout_constraintStart_toStartOf="@id/energyValue"
-                app:layout_constraintTop_toBottomOf="@+id/energyValue" />
+                app:layout_constraintStart_toStartOf="@id/energy"
+                app:layout_constraintTop_toBottomOf="@+id/energy" />
 
             <TextView
                 android:id="@+id/doms"
@@ -124,11 +124,11 @@
                 android:textSize="25sp"
                 tools:layout_editor_absoluteX="230dp"
                 tools:layout_editor_absoluteY="82dp"
-                app:layout_constraintStart_toStartOf="@id/moodValue"
-                app:layout_constraintTop_toBottomOf="@+id/moodValue"/>
+                app:layout_constraintStart_toStartOf="@id/mood"
+                app:layout_constraintTop_toBottomOf="@+id/mood"/>
 
             <TextView
-                android:id="@+id/sleepValue"
+                android:id="@+id/sleep"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
