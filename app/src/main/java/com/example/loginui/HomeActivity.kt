@@ -89,7 +89,6 @@ class HomeActivity : AppCompatActivity() {
                     workoutSummaryAdapter.refreshData(db.getTrainingByClientId(selectedUserId.toString()))
                 }
             }
-
             override fun afterTextChanged(s: Editable?) {}
         })
     }
