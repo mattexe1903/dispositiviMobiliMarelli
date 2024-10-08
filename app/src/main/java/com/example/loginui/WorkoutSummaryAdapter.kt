@@ -37,14 +37,12 @@ class WorkoutSummaryAdapter(private var trainings: List<TrainingModel>,context: 
         val training = trainings[position]
         val db = WorkoutDatabaseHelper(holder.itemView.context)
         val client = db.getClientById(training.clientId)
-        //TODO assign the appropriate attribute into the right area
-        //val rprs = db.getRprByTrainingId(training.id.toString())
-        //val rpr = rprs[position]
+        val rpr = db.getRprByTrainingId(training.id.toString())
         holder.clientName.text = client
-        holder.workoutNumber.text = ""
-        //holder.energy.text = "energy: ${rpr.energy}"
-
-        
+        rpr?.mood?.let { holder.mood.text = "mood: $it" }
+        rpr?.sleep?.let { holder.sleep.text = "sleep: $it" }
+        rpr?.energy?.let { holder.energy.text = "energy: $it" }
+        rpr?.doms?.let { holder.doms.text = "doms: $it" }
 
         holder.toggleButton.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
