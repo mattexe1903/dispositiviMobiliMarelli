@@ -1,6 +1,5 @@
 package com.example.loginui
 
-import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -59,6 +58,7 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         private const val COLUMN_TRAINING_DURATION ="duration"
         private const val COLUMN_TRAINING_CLIENT = "client"
         private const val COLUMN_TRAINING_PT= "operator"
+        private const val COLUMN_TRAINING_WNUMBER = "workoutNumber"
 
         //column training details table
         private const val COLUMN_TD_ID="id"
@@ -104,7 +104,8 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
                 "$COLUMN_TRAINING_DATE TEXT,"+
                 "$COLUMN_TRAINING_DURATION TEXT,"+
                 "$COLUMN_TRAINING_CLIENT TEXT," +
-                "$COLUMN_TRAINING_PT TEXT)"
+                "$COLUMN_TRAINING_PT TEXT, "+
+                "$COLUMN_TRAINING_WNUMBER INTEGER)"
 
         private const val CREATETABLETD = "CREATE TABLE $TABLE_TRAININGDETAILS("+
                 "$COLUMN_TD_ID INTEGER PRIMARY KEY, "+
@@ -178,6 +179,7 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
             put(COLUMN_TRAINING_DURATION, training.duration)
             put(COLUMN_TRAINING_CLIENT, training.clientId)
             put(COLUMN_TRAINING_PT, training.personalTrainerId)
+            put(COLUMN_TRAINING_WNUMBER, training.workoutNumber)
         }
         db.insert(TABLE_TRAINING, null, values)
         db.close()
@@ -310,45 +312,6 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         return count
     }
 
-    fun getAllData(): List<TrainingModel> {
-        val trainingList = mutableListOf<TrainingModel>()
-        val db = readableDatabase
-        val query = "SELECT * FROM $TABLE_TRAINING"
-        val cursor = db.rawQuery(query, null)
-        while(cursor.moveToNext()){
-            val trainingId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_ID))
-            val clientId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_CLIENT))
-            val date = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_DATE))
-            val duration = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_DURATION))
-            val personalTrainerId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_PT))
-            val training = TrainingModel(trainingId, date, duration, clientId.toString(),personalTrainerId.toString())
-            trainingList.add(training)
-        }
-        cursor.close()
-        db.close()
-        return trainingList
-    }
-
-    fun getLastFiveTraining(): List<TrainingModel> {
-        val trainingList = mutableListOf<TrainingModel>()
-        val db = readableDatabase
-        val query = "SELECT * FROM $TABLE_TRAINING ORDER BY $COLUMN_TRAINING_ID DESC LIMIT 5"
-        val cursor = db.rawQuery(query, null)
-        while (cursor.moveToNext()) {
-            val training = TrainingModel(
-                cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_ID)),
-                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_DATE)),
-                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_DURATION)),
-                cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_CLIENT)).toString(),
-                cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_PT)).toString()
-            )
-            trainingList.add(training)
-        }
-        cursor.close()
-        db.close()
-        return trainingList
-    }
-
     fun getTrainingByClientId(id: String): List<TrainingModel> {
         val trainingList = mutableListOf<TrainingModel>()
         val db = readableDatabase
@@ -360,7 +323,8 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
                 cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_DATE)),
                 cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_DURATION)),
                 cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_CLIENT)).toString(),
-                cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_PT)).toString()
+                cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_PT)).toString(),
+                cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_WNUMBER))
             )
             trainingList.add(training)
         }
@@ -409,5 +373,20 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         cursor.close()
         db.close()
         return rprModel
+    }
+
+    fun getWorkoutNumberByClientId(userId: String): Int{
+        val workoutNumber: Int
+        val db = readableDatabase
+        val query = "SELECT MAX(workoutNumber) FROM training WHERE client=?"
+        val cursor = db.rawQuery(query, arrayOf(userId))
+        workoutNumber = if (cursor.moveToFirst()){
+            cursor.getInt(0)+1
+        } else {
+            1
+        }
+        cursor.close()
+        db.close()
+        return workoutNumber
     }
 }

@@ -72,8 +72,6 @@ class NewWorkoutActivity : AppCompatActivity() {
         binding.edEnergyValue.addTextChangedListener(textWatcher)
         binding.edDomsValue.addTextChangedListener(textWatcher)
         binding.edSleepValue.addTextChangedListener(textWatcher)
-
-        //TODO seekbar to generate borg value, not relative to the single exercise (like seekbar in boxExercire) but relative to the entire workout
     }
 
     //TODO data and duration
@@ -87,8 +85,10 @@ class NewWorkoutActivity : AppCompatActivity() {
             val ptId = authManager.getCurrentUserUid()
 
             if(userId!= "null"){
+                //TODO adjust with autoincremental id
                 val trainingId = db.countTrainingRows()+1
-                val trainingModel = TrainingModel(trainingId, "data", "duration", userId, ptId.toString())
+                val workoutNumber = db.getWorkoutNumberByClientId(userId)
+                val trainingModel = TrainingModel(trainingId, "data", "duration", userId, ptId.toString(), workoutNumber)
                 db.insertTraining(trainingModel)
                 
                 val mood = binding.edMoodValue.text.toString()
