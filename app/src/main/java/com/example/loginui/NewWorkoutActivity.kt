@@ -110,7 +110,9 @@ class NewWorkoutActivity : AppCompatActivity() {
                     val weight = box.findViewById<EditText>(R.id.editWeight)
                     val note = box.findViewById<EditText>(R.id.editNote)
                     val executionTime = box.findViewById<EditText>(R.id.editExecutionTime)
-                    val borg = box.findViewById<SeekBar>(R.id.exerciseBorgValue)
+                    val seekBar: SeekBar = box.findViewById(R.id.exerciseBorgValue)
+                    val borg: Int = seekBar.progress + 6
+
                     //TODO check if this control-if is necessary for the correct functionality
                     if (exerciseId != null && reps != null && sets != null && weight != null && executionTime != null) {
                         allValues.add(

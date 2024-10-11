@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
@@ -73,13 +74,13 @@
 
     <SeekBar
         android:id="@+id/exerciseBorgValue"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="match_parent"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_height="25dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/seekbar_bg"
-        android:max="15"
-        android:progress="1"
+        android:max="14"
+        android:progress="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWeight" />
 

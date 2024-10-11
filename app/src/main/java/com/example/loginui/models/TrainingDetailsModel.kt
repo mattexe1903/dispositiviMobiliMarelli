@@ -1,7 +1,5 @@
 package com.example.loginui.models
 
-import android.widget.SeekBar
-
 data class TrainingDetailsModel(
     val id: Int,
     val reps: String,
@@ -11,5 +9,5 @@ data class TrainingDetailsModel(
     val exerciseId: Int?,
     val note: String,
     val executionTime: String,
-    val borg: SeekBar
+    val borg: Int
 )

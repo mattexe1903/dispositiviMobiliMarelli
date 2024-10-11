@@ -40,11 +40,15 @@ class WorkoutSummaryAdapter(private var trainings: List<TrainingModel>,context: 
         val rpr = db.getRprByTrainingId(training.id.toString())
         holder.clientName.text = client
         training.workoutNumber.let { holder.workoutNumber.text = "$it W°" }
+        //TODO day since last workout information (from date of every workout)
+
         rpr?.mood?.let { holder.mood.text = "mood: $it" }
         rpr?.sleep?.let { holder.sleep.text = "sleep: $it" }
         rpr?.energy?.let { holder.energy.text = "energy: $it" }
         rpr?.doms?.let { holder.doms.text = "doms: $it" }
-
+        
+        //TODO borg information
+        //TODO training load value
 
         holder.toggleButton.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
