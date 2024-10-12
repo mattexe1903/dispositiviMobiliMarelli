@@ -389,4 +389,18 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         db.close()
         return workoutNumber
     }
+
+    fun getBorgValuesByTrainingId(trainingId: String): List<Int> {
+        val borgValues = mutableListOf<Int>()
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT borg FROM trainingDetails WHERE training = ?", arrayOf(trainingId))
+        if (cursor.moveToFirst()) {
+            do {
+                borgValues.add(cursor.getInt(0))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return borgValues
+    }
+
 }
