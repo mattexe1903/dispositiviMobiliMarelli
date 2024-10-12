@@ -16,6 +16,10 @@ import com.example.loginui.manager.AuthManager
 import com.example.loginui.models.RPRModel
 import com.example.loginui.models.TrainingDetailsModel
 import com.example.loginui.models.TrainingModel
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class NewWorkoutActivity : AppCompatActivity() {
 
@@ -74,71 +78,81 @@ class NewWorkoutActivity : AppCompatActivity() {
         binding.edSleepValue.addTextChangedListener(textWatcher)
     }
 
-    //TODO data and duration
+    //TODO duration with timer
     private fun saveWorkout(){
         binding.saveButton.setOnClickListener{
             val clientName = binding.editName.text.toString()
             val clientSurname = binding.editSurname.text.toString()
-            val userId = db.getUserIdByNameAndSurname(clientName, clientSurname).toString()
-            val containerBox = binding.container
-            val allValues = mutableListOf<TrainingDetailsModel>()
-            val ptId = authManager.getCurrentUserUid()
+            val editDate: EditText = findViewById(R.id.editDate)
+            val dateText: String = editDate.text.toString()
+            val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
-            if(userId!= "null"){
-                //TODO adjust with autoincremental id
-                val trainingId = db.countTrainingRows()+1
-                val workoutNumber = db.getWorkoutNumberByClientId(userId)
-                val trainingModel = TrainingModel(trainingId, "data", "duration", userId, ptId.toString(), workoutNumber)
-                db.insertTraining(trainingModel)
-                
-                val mood = binding.edMoodValue.text.toString()
-                val energy = binding.edEnergyValue.text.toString()
-                val doms = binding.edDomsValue.text.toString()
-                val sleep = binding.edSleepValue.text.toString()
-                val index = binding.indexValue.text.toString()
-                val borg = binding.borgValue.text.toString()
-                val rprModel = RPRModel(0, userId, mood, sleep, energy, doms, index, borg, trainingId)
-                db.insertRPR(rprModel)
+            try {
+                val date: Date = formatter.parse(dateText)
+                val formattedDate = formatter.format(date)
+                val userId = db.getUserIdByNameAndSurname(clientName, clientSurname).toString()
+                val containerBox = binding.container
+                val allValues = mutableListOf<TrainingDetailsModel>()
+                val ptId = authManager.getCurrentUserUid()
+
+                if(userId != "null"){
+                    //TODO adjust with autoincremental id
+                    val trainingId = db.countTrainingRows()+1
+                    val workoutNumber = db.getWorkoutNumberByClientId(userId)
+                    val trainingModel = TrainingModel(trainingId, formattedDate, "duration", userId, ptId.toString(), workoutNumber)
+                    db.insertTraining(trainingModel)
+
+                    val mood = binding.edMoodValue.text.toString()
+                    val energy = binding.edEnergyValue.text.toString()
+                    val doms = binding.edDomsValue.text.toString()
+                    val sleep = binding.edSleepValue.text.toString()
+                    val index = binding.indexValue.text.toString()
+                    val borg = binding.borgValue.text.toString()
+                    val rprModel = RPRModel(0, userId, mood, sleep, energy, doms, index, borg, trainingId)
+                    db.insertRPR(rprModel)
 
 
-                for (i in 0 until containerBox.childCount) {
-                    val box = containerBox.getChildAt(i)
-                    val exerciseName = box.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
-                    val exerciseId = db.getExerciseIdFromName(exerciseName.text.toString())
-                    val reps = box.findViewById<EditText>(R.id.editReps)
-                    val sets = box.findViewById<EditText>(R.id.editSerie)
-                    val weight = box.findViewById<EditText>(R.id.editWeight)
-                    val note = box.findViewById<EditText>(R.id.editNote)
-                    val executionTime = box.findViewById<EditText>(R.id.editExecutionTime)
-                    val seekBar: SeekBar = box.findViewById(R.id.exerciseBorgValue)
-                    val borg: Int = seekBar.progress + 6
+                    for (i in 0 until containerBox.childCount) {
+                        val box = containerBox.getChildAt(i)
+                        val exerciseName = box.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
+                        val exerciseId = db.getExerciseIdFromName(exerciseName.text.toString())
+                        val reps = box.findViewById<EditText>(R.id.editReps)
+                        val sets = box.findViewById<EditText>(R.id.editSerie)
+                        val weight = box.findViewById<EditText>(R.id.editWeight)
+                        val note = box.findViewById<EditText>(R.id.editNote)
+                        val executionTime = box.findViewById<EditText>(R.id.editExecutionTime)
+                        val seekBar: SeekBar = box.findViewById(R.id.exerciseBorgValue)
+                        val borg: Int = seekBar.progress + 6
 
-                    //TODO check if this control-if is necessary for the correct functionality
-                    if (exerciseId != null && reps != null && sets != null && weight != null && executionTime != null) {
-                        allValues.add(
-                            TrainingDetailsModel(
-                                0,
-                                reps.text.toString(),
-                                sets.text.toString(),
-                                weight.text.toString(),
-                                trainingId,
-                                exerciseId,
-                                note.text.toString(),
-                                executionTime.text.toString(),
-                                borg
+                        //TODO check if this control-if is necessary for the correct functionality
+                        if (exerciseId != null && reps != null && sets != null && weight != null && executionTime != null) {
+                            allValues.add(
+                                TrainingDetailsModel(
+                                    0,
+                                    reps.text.toString(),
+                                    sets.text.toString(),
+                                    weight.text.toString(),
+                                    trainingId,
+                                    exerciseId,
+                                    note.text.toString(),
+                                    executionTime.text.toString(),
+                                    borg
+                                )
                             )
-                        )
-                    }else{
-                        Toast.makeText(this, "problem null", Toast.LENGTH_SHORT).show()
+                        }else{
+                            Toast.makeText(this, "problem null", Toast.LENGTH_SHORT).show()
+                        }
                     }
+                    for (item in allValues) {
+                        db.insertTrainingDetails(item)
+                    }
+                    finish()
+                    Toast.makeText(this, "workout saved", Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(this, "user not found", Toast.LENGTH_SHORT).show()
                 }
-                for (item in allValues) {
-                    db.insertTrainingDetails(item)
-                }
-                finish()
-                Toast.makeText(this, "workout saved", Toast.LENGTH_SHORT).show()
-            }else{
-                Toast.makeText(this, "user not found", Toast.LENGTH_SHORT).show()
+            } catch (e: ParseException) {
+                Toast.makeText(this, "date not valid", Toast.LENGTH_SHORT).show()
             }
         }
     }

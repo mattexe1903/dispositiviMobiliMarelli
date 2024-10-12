@@ -10,6 +10,9 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.loginui.models.TrainingModel
 import com.example.loginui.models.RPRModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class WorkoutSummaryAdapter(private var trainings: List<TrainingModel>,context: Context) :
     RecyclerView.Adapter<WorkoutSummaryAdapter.TrainingViewHolder>() {
@@ -38,13 +41,23 @@ class WorkoutSummaryAdapter(private var trainings: List<TrainingModel>,context: 
         val db = WorkoutDatabaseHelper(holder.itemView.context)
         val client = db.getClientById(training.clientId)
         val rpr = db.getRprByTrainingId(training.id.toString())
-
         val borgValues = db.getBorgValuesByTrainingId(training.id.toString())
         val averageBorg = borgValues.average().toInt()
 
         holder.clientName.text = client
-        training.workoutNumber.let { holder.workoutNumber.text = "$it W°" }
-        //TODO day since last workout information (from date of every workout)
+        training.workoutNumber.let { holder.workoutNumber.text = "$it ° w" }
+
+        val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        if (position > 0) {
+            val previousTraining = trainings[position - 1]
+            val currentDate: Date = formatter.parse(training.date)
+            val previousDate: Date = formatter.parse(previousTraining.date)
+            val diff: Long = currentDate.time - previousDate.time
+            val daysSinceLastWorkout = diff / (1000 * 60 * 60 * 24)
+            holder.daySinceLastWorkout.text = "$daysSinceLastWorkout days"
+        } else {
+            holder.daySinceLastWorkout.text = ""
+        }
 
         rpr?.mood?.let { holder.mood.text = "mood: $it" }
         rpr?.sleep?.let { holder.sleep.text = "sleep: $it" }
