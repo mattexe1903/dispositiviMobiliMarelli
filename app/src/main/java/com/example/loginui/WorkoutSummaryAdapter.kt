@@ -54,6 +54,7 @@ class WorkoutSummaryAdapter(private var trainings: List<TrainingModel>,context: 
 
         //TODO training load value
 
+
         holder.toggleButton.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 holder.cardView.visibility = View.VISIBLE
