@@ -1,11 +1,15 @@
 package com.example.loginui
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Button
 import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.TextView
@@ -26,6 +30,8 @@ class NewWorkoutActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNewWorkoutBinding
     private lateinit var db: WorkoutDatabaseHelper
     private lateinit var authManager: AuthManager
+    private val handler = Handler(Looper.getMainLooper())
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,17 +57,67 @@ class NewWorkoutActivity : AppCompatActivity() {
         resultTextView.text = "$average"
     }
 
-    private fun addNewBoxInContainer(){
+    private fun addNewBoxInContainer() {
         binding.buttonAddExercise.setOnClickListener {
-            val newBox = LayoutInflater.from(this).inflate(R.layout.exercise_box, binding.container, false)
-            val editExercise = newBox.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
+            val newBox = LayoutInflater.from(this).inflate(R.layout.new_exercise_box, binding.container, false)
 
+            val editExercise = newBox.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
             val exercises = db.getExercisesName("")
             val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, exercises)
             editExercise.setAdapter(adapter)
 
+            val timerTextView = newBox.findViewById<TextView>(R.id.timerTextView)
+            val startButton = newBox.findViewById<Button>(R.id.start)
+            val stopButton = newBox.findViewById<Button>(R.id.stop)
+            val intermediateButton = newBox.findViewById<Button>(R.id.intermedio)
+            val resetButton = newBox.findViewById<Button>(R.id.reset)
+
+            stopButton.visibility = View.GONE
+            intermediateButton.visibility = View.GONE
+            resetButton.visibility = View.GONE
+
+            val boxTimer = Timer(handler) { elapsedTime ->
+                timerTextView.text = formatDuration(elapsedTime)
+            }
+
+            startButton.setOnClickListener {
+                boxTimer.start()
+                stopButton.visibility = View.VISIBLE
+                intermediateButton.visibility = View.VISIBLE
+                resetButton.visibility = View.GONE
+                startButton.visibility = View.GONE
+            }
+
+            stopButton.setOnClickListener {
+                boxTimer.stop()
+                startButton.visibility = View.VISIBLE
+                stopButton.visibility = View.GONE
+                resetButton.visibility = View.VISIBLE
+                intermediateButton.visibility = View.GONE
+            }
+
+            intermediateButton.setOnClickListener {
+                boxTimer.intermediate()
+            }
+
+            resetButton.setOnClickListener {
+                boxTimer.reset()
+                stopButton.visibility = View.GONE
+                intermediateButton.visibility = View.GONE
+                resetButton.visibility = View.GONE
+                startButton.visibility = View.VISIBLE
+            }
+
             binding.container.addView(newBox)
         }
+    }
+
+
+    private fun formatDuration(millis: Long): String {
+        val hours = millis / (1000 * 60 * 60)
+        val minutes = (millis / (1000 * 60)) % 60
+        val seconds = (millis / 1000) % 60
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
     private fun rprSection(){
