@@ -69,11 +69,9 @@ class NewWorkoutActivity : AppCompatActivity() {
             val timerTextView = newBox.findViewById<TextView>(R.id.timerTextView)
             val startButton = newBox.findViewById<Button>(R.id.start)
             val stopButton = newBox.findViewById<Button>(R.id.stop)
-            val intermediateButton = newBox.findViewById<Button>(R.id.intermedio)
             val resetButton = newBox.findViewById<Button>(R.id.reset)
 
             stopButton.visibility = View.GONE
-            intermediateButton.visibility = View.GONE
             resetButton.visibility = View.GONE
 
             val boxTimer = Timer(handler) { elapsedTime ->
@@ -83,7 +81,6 @@ class NewWorkoutActivity : AppCompatActivity() {
             startButton.setOnClickListener {
                 boxTimer.start()
                 stopButton.visibility = View.VISIBLE
-                intermediateButton.visibility = View.VISIBLE
                 resetButton.visibility = View.GONE
                 startButton.visibility = View.GONE
             }
@@ -93,17 +90,11 @@ class NewWorkoutActivity : AppCompatActivity() {
                 startButton.visibility = View.VISIBLE
                 stopButton.visibility = View.GONE
                 resetButton.visibility = View.VISIBLE
-                intermediateButton.visibility = View.GONE
-            }
-
-            intermediateButton.setOnClickListener {
-                boxTimer.intermediate()
             }
 
             resetButton.setOnClickListener {
                 boxTimer.reset()
                 stopButton.visibility = View.GONE
-                intermediateButton.visibility = View.GONE
                 resetButton.visibility = View.GONE
                 startButton.visibility = View.VISIBLE
             }
@@ -134,7 +125,7 @@ class NewWorkoutActivity : AppCompatActivity() {
         binding.edSleepValue.addTextChangedListener(textWatcher)
     }
 
-    //TODO duration with timer
+    //TODO add the countdown
     private fun saveWorkout(){
         binding.saveButton.setOnClickListener{
             val clientName = binding.editName.text.toString()
