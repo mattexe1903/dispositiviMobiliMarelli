@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp"
     android:layout_marginStart="10dp"
+    android:layout_marginTop="10dp"
     android:layout_marginEnd="10dp"
+    android:layout_marginBottom="10dp"
     android:background="@drawable/box_bg"
     android:orientation="vertical"
     android:padding="16dp">
@@ -28,10 +28,10 @@
         android:id="@+id/editReps"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:layout_marginTop="5dp"
+        android:hint="reps"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
-        android:hint="reps"
-        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editExerciseName" />
 
@@ -53,9 +53,9 @@
         android:layout_height="48dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
+        android:hint="weight"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
-        android:hint="weight"
         app:layout_constraintStart_toEndOf="@+id/editSerie"
         app:layout_constraintTop_toBottomOf="@+id/editExerciseName" />
 
@@ -65,22 +65,25 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="10dp"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="80dp"
+        app:cardBackgroundColor="@color/black2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editNote">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="3dp">
+            android:layout_height="match_parent"
+            >
 
             <Button
                 android:id="@+id/start"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#4CAF50"
-                android:text="S"
+                android:background="@drawable/round_border_start_bt"
+                android:text="start"
+                android:textAllCaps="false"
+                android:textColor="@color/green"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +94,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#FFA500"
-                android:text="R"
+                android:text="reset"
+                android:textAllCaps="false"
                 android:textSize="16sp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -103,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#FD1808"
-                android:text="A"
+                android:text="stop"
                 android:textSize="16sp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -118,12 +122,12 @@
         android:id="@+id/sub_button_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center"
+        android:orientation="horizontal"
         android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/editWeight"
-        app:layout_constraintTop_toBottomOf="@+id/editExerciseName"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/editExerciseName">
 
         <Button
             android:id="@+id/button_stop"
@@ -141,8 +145,8 @@
 
     <SeekBar
         android:id="@+id/exerciseBorgValue"
-        android:layout_width="match_parent"
         style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="match_parent"
         android:layout_height="25dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/seekbar_bg"
