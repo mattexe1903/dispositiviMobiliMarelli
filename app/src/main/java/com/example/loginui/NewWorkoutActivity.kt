@@ -103,12 +103,17 @@ class NewWorkoutActivity : AppCompatActivity() {
         }
     }
 
-
     private fun formatDuration(millis: Long): String {
-        val hours = millis / (1000 * 60 * 60)
         val minutes = (millis / (1000 * 60)) % 60
         val seconds = (millis / 1000) % 60
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+        return String.format("%02d:%02d", minutes, seconds)
+    }
+
+    private fun parseDuration(duration: String): Long {
+        val parts = duration.split(":")
+        val minutes = parts[0].toLong()
+        val seconds = parts[1].toLong()
+        return (minutes * 60 + seconds)
     }
 
     private fun rprSection(){
@@ -167,7 +172,7 @@ class NewWorkoutActivity : AppCompatActivity() {
                         val sets = box.findViewById<EditText>(R.id.editSerie)
                         val weight = box.findViewById<EditText>(R.id.editWeight)
                         val note = box.findViewById<EditText>(R.id.editNote)
-                        val executionTime = box.findViewById<EditText>(R.id.editExecutionTime)
+                        val executionTime = box.findViewById<TextView>(R.id.timerTextView).text.toString()
                         val seekBar: SeekBar = box.findViewById(R.id.exerciseBorgValue)
                         val borg: Int = seekBar.progress + 6
 
@@ -182,7 +187,7 @@ class NewWorkoutActivity : AppCompatActivity() {
                                     trainingId,
                                     exerciseId,
                                     note.text.toString(),
-                                    executionTime.text.toString(),
+                                    parseDuration(executionTime).toString(),
                                     borg
                                 )
                             )

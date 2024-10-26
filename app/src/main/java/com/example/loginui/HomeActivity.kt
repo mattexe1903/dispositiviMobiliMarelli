@@ -56,7 +56,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun searchUser() {
-        val editExercise = this.findViewById<AutoCompleteTextView>(R.id.searchUser)
+        val editExercise = this.findViewById<AutoCompleteTextView>(R.id.searchUserName)
         val users = db.getUsersName("")
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, users)
         editExercise.setAdapter(adapter)
@@ -92,6 +92,7 @@ class HomeActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
     }
+
 
 
 
