@@ -1,12 +1,14 @@
 package com.example.loginui
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
@@ -16,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.loginui.databinding.ActivityNewWorkoutBinding
+import com.example.loginui.databinding.NewWorkoutActivity2Binding
 import com.example.loginui.manager.AuthManager
 import com.example.loginui.models.RPRModel
 import com.example.loginui.models.TrainingDetailsModel
@@ -27,7 +30,7 @@ import java.util.Locale
 
 class NewWorkoutActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityNewWorkoutBinding
+    private lateinit var binding: NewWorkoutActivity2Binding
     private lateinit var db: WorkoutDatabaseHelper
     private lateinit var authManager: AuthManager
     private val handler = Handler(Looper.getMainLooper())
@@ -35,11 +38,12 @@ class NewWorkoutActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityNewWorkoutBinding.inflate(layoutInflater)
+        binding = NewWorkoutActivity2Binding.inflate(layoutInflater)
         setContentView(binding.root)
         db = WorkoutDatabaseHelper(this)
         authManager = AuthManager()
 
+        countdownSection()
         addNewBoxInContainer()
         rprSection()
         saveWorkout()
@@ -130,7 +134,7 @@ class NewWorkoutActivity : AppCompatActivity() {
         binding.edSleepValue.addTextChangedListener(textWatcher)
     }
 
-    //TODO add the countdown
+    //TODO save countdown
     private fun saveWorkout(){
         binding.saveButton.setOnClickListener{
             val clientName = binding.editName.text.toString()
@@ -208,4 +212,61 @@ class NewWorkoutActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun countdownSection(){
+        val textViewCountdown = binding.textViewCountdown
+        val spinnerTimeSelection = binding.spinnerTimeSelection
+        val buttonStart = binding.buttonStart
+        var selectedTimeInMillis: Long = 0
+        var countdownTimer: CountDownTimer? = null
+
+        // Configura lo Spinner con l'array di tempi
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.countdown_times,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinnerTimeSelection.adapter = adapter
+        }
+
+        // Imposta il listener per il cambio di selezione dello Spinner
+        spinnerTimeSelection.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                // Imposta il tempo in millisecondi in base alla selezione
+                selectedTimeInMillis = when (position) {
+                    0 -> 60 * 60 * 1000L // 60 minuti
+                    1 -> 45 * 60 * 1000L // 45 minuti
+                    2 -> 30 * 60 * 1000L // 30 minuti
+                    else -> 0
+                }
+                textViewCountdown.text = formatTime(selectedTimeInMillis)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Nessuna azione necessaria
+            }
+        }
+
+        // Inizia il countdown quando viene premuto "Start"
+        buttonStart.setOnClickListener { countdownTimer?.cancel()
+
+            countdownTimer = object : CountDownTimer(selectedTimeInMillis, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    textViewCountdown.text = formatTime(millisUntilFinished)
+                }
+
+                override fun onFinish() {
+                    textViewCountdown.text = "Tempo scaduto!"
+                }
+            }.start()
+        }
+    }
+
+    private fun formatTime(millis: Long): String {
+        val minutes = (millis / 1000) / 60
+        val seconds = (millis / 1000) % 60
+        return String.format("%02d:%02d", minutes, seconds)
+    }
+
 }
