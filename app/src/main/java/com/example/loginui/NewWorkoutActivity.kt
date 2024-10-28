@@ -134,7 +134,7 @@ class NewWorkoutActivity : AppCompatActivity() {
         binding.edSleepValue.addTextChangedListener(textWatcher)
     }
 
-    //TODO save countdown
+    //TODO save countdown value as training duration
     private fun saveWorkout(){
         binding.saveButton.setOnClickListener{
             val clientName = binding.editName.text.toString()
@@ -220,7 +220,7 @@ class NewWorkoutActivity : AppCompatActivity() {
         var selectedTimeInMillis: Long = 0
         var countdownTimer: CountDownTimer? = null
 
-        // Configura lo Spinner con l'array di tempi
+        // Spinner configuration with the countdown_times
         ArrayAdapter.createFromResource(
             this,
             R.array.countdown_times,
@@ -230,25 +230,25 @@ class NewWorkoutActivity : AppCompatActivity() {
             spinnerTimeSelection.adapter = adapter
         }
 
-        // Imposta il listener per il cambio di selezione dello Spinner
+        // Set the listener for the spinner selection change
         spinnerTimeSelection.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                // Imposta il tempo in millisecondi in base alla selezione
+                // Set the time in milliseconds based on selection
                 selectedTimeInMillis = when (position) {
-                    0 -> 60 * 60 * 1000L // 60 minuti
-                    1 -> 45 * 60 * 1000L // 45 minuti
-                    2 -> 30 * 60 * 1000L // 30 minuti
+                    0 -> 60 * 60 * 1000L
+                    1 -> 45 * 60 * 1000L
+                    2 -> 30 * 60 * 1000L
                     else -> 0
                 }
                 textViewCountdown.text = formatTime(selectedTimeInMillis)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-                // Nessuna azione necessaria
+                // No action necessary
             }
         }
 
-        // Inizia il countdown quando viene premuto "Start"
+        // start the countdown when start button is pressed
         buttonStart.setOnClickListener { countdownTimer?.cancel()
 
             countdownTimer = object : CountDownTimer(selectedTimeInMillis, 1000) {
@@ -257,7 +257,7 @@ class NewWorkoutActivity : AppCompatActivity() {
                 }
 
                 override fun onFinish() {
-                    textViewCountdown.text = "Tempo scaduto!"
+                    textViewCountdown.text = "Time expired!"
                 }
             }.start()
         }
