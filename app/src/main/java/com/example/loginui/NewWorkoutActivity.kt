@@ -34,7 +34,7 @@ class NewWorkoutActivity : AppCompatActivity() {
     private lateinit var db: WorkoutDatabaseHelper
     private lateinit var authManager: AuthManager
     private val handler = Handler(Looper.getMainLooper())
-
+    private var workoutDuration: Long=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,7 +134,6 @@ class NewWorkoutActivity : AppCompatActivity() {
         binding.edSleepValue.addTextChangedListener(textWatcher)
     }
 
-    //TODO save countdown value as training duration
     private fun saveWorkout(){
         binding.saveButton.setOnClickListener{
             val clientName = binding.editName.text.toString()
@@ -155,7 +154,7 @@ class NewWorkoutActivity : AppCompatActivity() {
                     //TODO adjust with autoincremental id
                     val trainingId = db.countTrainingRows()+1
                     val workoutNumber = db.getWorkoutNumberByClientId(userId)
-                    val trainingModel = TrainingModel(trainingId, formattedDate, "duration", userId, ptId.toString(), workoutNumber)
+                    val trainingModel = TrainingModel(trainingId, formattedDate, formatTime(workoutDuration), userId, ptId.toString(), workoutNumber)
                     db.insertTraining(trainingModel)
 
                     val mood = binding.edMoodValue.text.toString()
@@ -219,6 +218,7 @@ class NewWorkoutActivity : AppCompatActivity() {
         val buttonStart = binding.buttonStart
         var selectedTimeInMillis: Long = 0
         var countdownTimer: CountDownTimer? = null
+        var isCountdownActive = false
 
         // Spinner configuration with the countdown_times
         ArrayAdapter.createFromResource(
@@ -249,7 +249,11 @@ class NewWorkoutActivity : AppCompatActivity() {
         }
 
         // start the countdown when start button is pressed
-        buttonStart.setOnClickListener { countdownTimer?.cancel()
+        buttonStart.setOnClickListener {
+            if(isCountdownActive) {
+                countdownTimer?.cancel()
+            }
+            workoutDuration = selectedTimeInMillis
 
             countdownTimer = object : CountDownTimer(selectedTimeInMillis, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
@@ -258,8 +262,11 @@ class NewWorkoutActivity : AppCompatActivity() {
 
                 override fun onFinish() {
                     textViewCountdown.text = "Time expired!"
+                    isCountdownActive= false
                 }
             }.start()
+
+            isCountdownActive = true
         }
     }
 
