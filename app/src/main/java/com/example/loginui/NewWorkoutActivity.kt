@@ -1,5 +1,6 @@
 package com.example.loginui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
@@ -14,9 +15,11 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.SeekBar
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.loginui.databinding.ActivityNewWorkoutBinding
 import com.example.loginui.databinding.NewWorkoutActivity2Binding
 import com.example.loginui.manager.AuthManager
@@ -61,14 +64,29 @@ class NewWorkoutActivity : AppCompatActivity() {
         resultTextView.text = "$average"
     }
 
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private fun addNewBoxInContainer() {
         binding.buttonAddExercise.setOnClickListener {
-            val newBox = LayoutInflater.from(this).inflate(R.layout.new_exercise_box, binding.container, false)
+            val newBox = LayoutInflater.from(this).inflate(R.layout.exercise_box, binding.container, false)
 
             val editExercise = newBox.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
             val exercises = db.getExercisesName("")
             val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, exercises)
             editExercise.setAdapter(adapter)
+
+            val switchTimeOption = newBox.findViewById<Switch>(R.id.switchTimeOption)
+            val timerOption = newBox.findViewById<ConstraintLayout>(R.id.timerOption)
+            val manualOption = newBox.findViewById<ConstraintLayout>(R.id.manualOption)
+
+            switchTimeOption.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    timerOption.visibility = View.GONE
+                    manualOption.visibility = View.VISIBLE
+                } else {
+                    timerOption.visibility = View.VISIBLE
+                    manualOption.visibility = View.GONE
+                }
+            }
 
             val timerTextView = newBox.findViewById<TextView>(R.id.timerTextView)
             val startButton = newBox.findViewById<Button>(R.id.start)
