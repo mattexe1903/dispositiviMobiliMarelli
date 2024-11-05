@@ -187,15 +187,23 @@ class NewWorkoutActivity : AppCompatActivity() {
 
                     for (i in 0 until containerBox.childCount) {
                         val box = containerBox.getChildAt(i)
+
                         val exerciseName = box.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
                         val exerciseId = db.getExerciseIdFromName(exerciseName.text.toString())
                         val reps = box.findViewById<EditText>(R.id.editReps)
                         val sets = box.findViewById<EditText>(R.id.editSerie)
                         val weight = box.findViewById<EditText>(R.id.editWeight)
                         val note = box.findViewById<EditText>(R.id.editNote)
-                        val executionTime = box.findViewById<TextView>(R.id.timerTextView).text.toString()
                         val seekBar: SeekBar = box.findViewById(R.id.exerciseBorgValue)
                         val borg: Int = seekBar.progress + 6
+
+                        val switchedTimeOption = box.findViewById<Switch>(R.id.switchTimeOption)
+                        val executionTime: String = if(switchedTimeOption.isChecked){
+                            box.findViewById<EditText>(R.id.editManualDuration).text.toString()
+                        }else{
+                            box.findViewById<TextView>(R.id.timerTextView).text.toString()
+                        }
+                        val durationInSeconds = parseDuration(executionTime)
 
                         //TODO check if this control-if is necessary for the correct functionality
                         if (exerciseId != null && reps != null && sets != null && weight != null && executionTime != null) {
@@ -208,7 +216,7 @@ class NewWorkoutActivity : AppCompatActivity() {
                                     trainingId,
                                     exerciseId,
                                     note.text.toString(),
-                                    parseDuration(executionTime).toString(),
+                                    durationInSeconds.toString(),
                                     borg
                                 )
                             )
