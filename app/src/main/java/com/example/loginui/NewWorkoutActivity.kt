@@ -20,7 +20,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.loginui.databinding.ActivityNewWorkoutBinding
 import com.example.loginui.databinding.NewWorkoutActivity2Binding
 import com.example.loginui.manager.AuthManager
 import com.example.loginui.models.RPRModel
@@ -56,11 +55,11 @@ class NewWorkoutActivity : AppCompatActivity() {
     //function
 
     private fun calculateAndDisplayAverage(mood: EditText, energy: EditText, doms: EditText, sleep: EditText, resultTextView: TextView) {
-        val value1 = mood.text.toString().toDoubleOrNull() ?: 0.0
-        val value2 = energy.text.toString().toDoubleOrNull() ?: 0.0
-        val value3 = doms.text.toString().toDoubleOrNull() ?: 0.0
-        val value4 = sleep.text.toString().toDoubleOrNull() ?: 0.0
-        val average = (value1 + value2 + value3 + value4) / 4
+        val moodValue = mood.text.toString().toDoubleOrNull() ?: 0.0
+        val energyValue = energy.text.toString().toDoubleOrNull() ?: 0.0
+        val domsValue = doms.text.toString().toDoubleOrNull() ?: 0.0
+        val sleepValue = sleep.text.toString().toDoubleOrNull() ?: 0.0
+        val average = ((moodValue + energyValue + (11-domsValue) + sleepValue) / 4)*2
         resultTextView.text = "$average"
     }
 
@@ -168,6 +167,9 @@ class NewWorkoutActivity : AppCompatActivity() {
                 val allValues = mutableListOf<TrainingDetailsModel>()
                 val ptId = authManager.getCurrentUserUid()
 
+                var overallBorg = 0
+                var exerciseCount =0
+
                 if(userId != "null"){
                     //TODO adjust with autoincremental id
                     val trainingId = db.countTrainingRows()+1
@@ -180,10 +182,6 @@ class NewWorkoutActivity : AppCompatActivity() {
                     val doms = binding.edDomsValue.text.toString()
                     val sleep = binding.edSleepValue.text.toString()
                     val index = binding.indexValue.text.toString()
-                    val borg = binding.borgValue.text.toString()
-                    val rprModel = RPRModel(0, userId, mood, sleep, energy, doms, index, borg, trainingId)
-                    db.insertRPR(rprModel)
-
 
                     for (i in 0 until containerBox.childCount) {
                         val box = containerBox.getChildAt(i)
@@ -196,6 +194,8 @@ class NewWorkoutActivity : AppCompatActivity() {
                         val note = box.findViewById<EditText>(R.id.editNote)
                         val seekBar: SeekBar = box.findViewById(R.id.exerciseBorgValue)
                         val borg: Int = seekBar.progress + 6
+                        overallBorg += borg
+                        exerciseCount++
 
                         val switchedTimeOption = box.findViewById<Switch>(R.id.switchTimeOption)
                         val executionTime: String = if(switchedTimeOption.isChecked){
@@ -224,6 +224,11 @@ class NewWorkoutActivity : AppCompatActivity() {
                             Toast.makeText(this, "problem null", Toast.LENGTH_SHORT).show()
                         }
                     }
+
+                    val avarageBorg = if(exerciseCount>0) overallBorg/exerciseCount else 0
+                    val rprModel = RPRModel(0, userId, mood, sleep, energy, doms, index, avarageBorg.toString(), trainingId)
+                    db.insertRPR(rprModel)
+
                     for (item in allValues) {
                         db.insertTrainingDetails(item)
                     }

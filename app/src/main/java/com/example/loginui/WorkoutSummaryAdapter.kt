@@ -41,8 +41,10 @@ class WorkoutSummaryAdapter(private var trainings: List<TrainingModel>,context: 
         val db = WorkoutDatabaseHelper(holder.itemView.context)
         val client = db.getClientById(training.clientId)
         val rpr = db.getRprByTrainingId(training.id.toString())
-        val borgValues = db.getBorgValuesByTrainingId(training.id.toString())
-        val averageBorg = borgValues.average().toInt()
+        val borg = rpr?.borg?.toIntOrNull() ?: 0
+        val activeTime = db.getActiveTimeByTrainingId(training.id) ?: 0
+        val activeTimeInMinutes = activeTime / 60
+        val trainingLoad = borg * activeTimeInMinutes
 
         holder.clientName.text = client
         training.workoutNumber.let { holder.workoutNumber.text = "$it ° w" }
@@ -63,10 +65,8 @@ class WorkoutSummaryAdapter(private var trainings: List<TrainingModel>,context: 
         rpr?.sleep?.let { holder.sleep.text = "sleep: $it" }
         rpr?.energy?.let { holder.energy.text = "energy: $it" }
         rpr?.doms?.let { holder.doms.text = "doms: $it" }
-        averageBorg.let{holder.borg.text = "borg: $it"}
-
-        //TODO training load value
-
+        borg.let{holder.borg.text = "borg: $it"}
+        trainingLoad.let {holder.trainingLoad.text = "training load: $it"}
 
         holder.toggleButton.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
