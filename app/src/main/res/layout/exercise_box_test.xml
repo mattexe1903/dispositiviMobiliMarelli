@@ -37,6 +37,7 @@
 
     <NumberPicker
         android:id="@+id/repsPicker"
+        android:theme="@style/AppTheme.Picker"
         android:layout_width="30dp"
         android:layout_height="70dp"
         android:layout_marginStart="10dp"
@@ -57,6 +58,7 @@
 
     <NumberPicker
         android:id="@+id/seriesPicker"
+        android:theme="@style/AppTheme.Picker"
         android:layout_width="30dp"
         android:layout_height="70dp"
         android:layout_marginStart="10dp"
@@ -77,6 +79,7 @@
 
     <NumberPicker
         android:id="@+id/weightPicker"
+        android:theme="@style/AppTheme.Picker"
         android:layout_width="30dp"
         android:layout_height="70dp"
         android:layout_marginStart="10dp"

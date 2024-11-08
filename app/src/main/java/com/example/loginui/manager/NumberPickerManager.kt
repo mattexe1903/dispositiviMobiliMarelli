@@ -2,7 +2,6 @@ package com.example.loginui.manager
 
 import android.widget.NumberPicker
 
-
 class NumberPickerManager {
     fun configureRepsPicker(repsPicker: NumberPicker){
         repsPicker.minValue = 0
