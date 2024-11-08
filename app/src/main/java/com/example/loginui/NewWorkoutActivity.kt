@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
+import android.widget.NumberPicker
 import android.widget.SeekBar
 import android.widget.Switch
 import android.widget.TextView
@@ -22,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.loginui.databinding.NewWorkoutActivity2Binding
 import com.example.loginui.manager.AuthManager
+import com.example.loginui.manager.NumberPickerManager
 import com.example.loginui.models.RPRModel
 import com.example.loginui.models.TrainingDetailsModel
 import com.example.loginui.models.TrainingModel
@@ -66,7 +68,7 @@ class NewWorkoutActivity : AppCompatActivity() {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private fun addNewBoxInContainer() {
         binding.buttonAddExercise.setOnClickListener {
-            val newBox = LayoutInflater.from(this).inflate(R.layout.exercise_box, binding.container, false)
+            val newBox = LayoutInflater.from(this).inflate(R.layout.exercise_box_test, binding.container, false)
 
             val editExercise = newBox.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
             val exercises = db.getExercisesName("")
@@ -119,6 +121,14 @@ class NewWorkoutActivity : AppCompatActivity() {
                 resetButton.visibility = View.GONE
                 startButton.visibility = View.VISIBLE
             }
+
+            val numberPickerManager = NumberPickerManager()
+            val reps = newBox.findViewById<NumberPicker>(R.id.repsPicker)
+            numberPickerManager.configureRepsPicker(reps)
+            val sets = newBox.findViewById<NumberPicker>(R.id.seriesPicker)
+            numberPickerManager.configureSetsPicker(sets)
+            val weight = newBox.findViewById<NumberPicker>(R.id.weightPicker)
+            numberPickerManager.configureWeightPicker(weight)
 
             binding.container.addView(newBox)
         }
@@ -188,9 +198,9 @@ class NewWorkoutActivity : AppCompatActivity() {
 
                         val exerciseName = box.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
                         val exerciseId = db.getExerciseIdFromName(exerciseName.text.toString())
-                        val reps = box.findViewById<EditText>(R.id.editReps)
-                        val sets = box.findViewById<EditText>(R.id.editSerie)
-                        val weight = box.findViewById<EditText>(R.id.editWeight)
+                        val reps = box.findViewById<NumberPicker>(R.id.repsPicker)
+                        val sets = box.findViewById<NumberPicker>(R.id.seriesPicker)
+                        val weight = box.findViewById<NumberPicker>(R.id.weightPicker)
                         val note = box.findViewById<EditText>(R.id.editNote)
                         val seekBar: SeekBar = box.findViewById(R.id.exerciseBorgValue)
                         val borg: Int = seekBar.progress + 6
@@ -210,9 +220,9 @@ class NewWorkoutActivity : AppCompatActivity() {
                             allValues.add(
                                 TrainingDetailsModel(
                                     0,
-                                    reps.text.toString(),
-                                    sets.text.toString(),
-                                    weight.text.toString(),
+                                    reps.value.toString(),
+                                    sets.value.toString(),
+                                    weight.value.toString(),
                                     trainingId,
                                     exerciseId,
                                     note.text.toString(),

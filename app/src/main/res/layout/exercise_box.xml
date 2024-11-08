@@ -25,7 +25,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editReps"
+        android:id="@+id/reps"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="5dp"
@@ -36,7 +36,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editExerciseName" />
 
     <EditText
-        android:id="@+id/editSerie"
+        android:id="@+id/series"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="10dp"
@@ -44,11 +44,11 @@
         android:hint="series"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
-        app:layout_constraintStart_toEndOf="@+id/editReps"
+        app:layout_constraintStart_toEndOf="@+id/reps"
         app:layout_constraintTop_toBottomOf="@+id/editExerciseName" />
 
     <EditText
-        android:id="@+id/editWeight"
+        android:id="@+id/weight"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="10dp"
@@ -56,7 +56,7 @@
         android:hint="weight"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
-        app:layout_constraintStart_toEndOf="@+id/editSerie"
+        app:layout_constraintStart_toEndOf="@+id/series"
         app:layout_constraintTop_toBottomOf="@+id/editExerciseName" />
 
 
@@ -70,7 +70,7 @@
         android:max="14"
         android:progress="0"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editWeight" />
+        app:layout_constraintTop_toBottomOf="@+id/weight" />
 
     <EditText
         android:id="@+id/editNote"
