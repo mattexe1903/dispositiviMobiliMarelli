@@ -23,6 +23,7 @@ class WorkoutSummaryAdapter(private var trainings: List<TrainingModel>,context: 
         val cardView: CardView = itemView.findViewById(R.id.cardRprSummary)
         val workoutNumber: TextView = itemView.findViewById(R.id.workoutNumber)
         val daySinceLastWorkout: TextView = itemView.findViewById(R.id.daySinceLastWorkout)
+        val index: TextView = itemView.findViewById(R.id.indexValue)
         val energy: TextView = itemView.findViewById(R.id.energy)
         val sleep: TextView = itemView.findViewById(R.id.sleep)
         val doms: TextView = itemView.findViewById(R.id.doms)
@@ -61,6 +62,7 @@ class WorkoutSummaryAdapter(private var trainings: List<TrainingModel>,context: 
             holder.daySinceLastWorkout.text = ""
         }
 
+        rpr?.index.let { holder.index.text = "index: $it"}
         rpr?.mood?.let { holder.mood.text = "mood: $it" }
         rpr?.sleep?.let { holder.sleep.text = "sleep: $it" }
         rpr?.energy?.let { holder.energy.text = "energy: $it" }

@@ -50,11 +50,11 @@
         app:layout_constraintTop_toBottomOf="@+id/clientName" />
 
     <TextView
-        android:id="@+id/rprSummary"
+        android:id="@+id/indexValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="RPR summary"
+        android:text="Index:"
         android:textColor="@color/white"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="@+id/daySinceLastWorkout"
@@ -70,9 +70,9 @@
         android:clickable="true"
         android:textOff=""
         android:textOn=""
-        app:layout_constraintBottom_toBottomOf="@+id/rprSummary"
+        app:layout_constraintBottom_toBottomOf="@+id/indexValue"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rprSummary" />
+        app:layout_constraintTop_toTopOf="@+id/indexValue" />
 
 
     <androidx.cardview.widget.CardView
@@ -83,7 +83,7 @@
         android:visibility="gone"
         app:cardBackgroundColor="@color/black2"
         app:layout_constraintBottom_toTopOf="@+id/borg"
-        app:layout_constraintTop_toBottomOf="@+id/rprSummary"
+        app:layout_constraintTop_toBottomOf="@+id/indexValue"
         tools:layout_editor_absoluteX="209dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -151,7 +151,7 @@
         android:text="borg: "
         android:textColor="@color/white"
         android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="@+id/rprSummary"
+        app:layout_constraintStart_toStartOf="@+id/indexValue"
         app:layout_constraintTop_toBottomOf="@+id/cardRprSummary" />
 
     <TextView
