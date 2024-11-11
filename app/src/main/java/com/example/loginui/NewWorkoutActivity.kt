@@ -29,6 +29,7 @@ import com.example.loginui.models.TrainingDetailsModel
 import com.example.loginui.models.TrainingModel
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -47,6 +48,8 @@ class NewWorkoutActivity : AppCompatActivity() {
         db = WorkoutDatabaseHelper(this)
         authManager = AuthManager()
 
+        setDefaultDate()
+
         countdownSection()
         addNewBoxInContainer()
         rprSection()
@@ -54,7 +57,17 @@ class NewWorkoutActivity : AppCompatActivity() {
     }
 
 
-    //function
+    //FUNCTION
+
+    private fun setDefaultDate(){
+        val calendar = Calendar.getInstance()
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val month = calendar.get(Calendar.MONTH) + 1
+        val year = calendar.get(Calendar.YEAR)
+
+        val formattedDate = String.format("%02d/%02d/%d", day, month, year)
+        binding.editDate.setText(formattedDate)
+    }
 
     private fun calculateAndDisplayAverage(mood: EditText, energy: EditText, doms: EditText, sleep: EditText, resultTextView: TextView) {
         val moodValue = mood.text.toString().toDoubleOrNull() ?: 0.0
@@ -130,7 +143,7 @@ class NewWorkoutActivity : AppCompatActivity() {
             val weight = newBox.findViewById<NumberPicker>(R.id.weightPicker)
             numberPickerManager.configureWeightPicker(weight)
 
-            binding.container.addView(newBox)
+            binding.container.addView(newBox, 0)
         }
     }
 
