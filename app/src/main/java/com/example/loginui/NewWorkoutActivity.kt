@@ -81,7 +81,7 @@ class NewWorkoutActivity : AppCompatActivity() {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private fun addNewBoxInContainer() {
         binding.buttonAddExercise.setOnClickListener {
-            val newBox = LayoutInflater.from(this).inflate(R.layout.exercise_box_test, binding.container, false)
+            val newBox = LayoutInflater.from(this).inflate(R.layout.exercise_box, binding.container, false)
 
             val editExercise = newBox.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
             val exercises = db.getExercisesName("")

@@ -24,53 +24,79 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <TextView
         android:id="@+id/reps"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="5dp"
-        android:hint="reps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reps"
         android:textColor="@color/white"
-        android:textColorHint="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/exerciseBorgValue"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editExerciseName" />
 
-    <EditText
-        android:id="@+id/series"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
+    <NumberPicker
+        android:id="@+id/repsPicker"
+        android:theme="@style/AppTheme.Picker"
+        android:layout_width="30dp"
+        android:layout_height="70dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:hint="series"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
         app:layout_constraintStart_toEndOf="@+id/reps"
         app:layout_constraintTop_toBottomOf="@+id/editExerciseName" />
 
-    <EditText
-        android:id="@+id/weight"
+    <TextView
+        android:id="@+id/series"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:hint="weight"
+        android:layout_height="wrap_content"
+        android:text="Series"
         android:textColor="@color/white"
-        android:textColorHint="@color/white"
+        android:textSize="18sp"
+        android:layout_marginStart="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/exerciseBorgValue"
+        app:layout_constraintStart_toEndOf="@+id/repsPicker"
+        app:layout_constraintTop_toBottomOf="@+id/editExerciseName" />
+
+    <NumberPicker
+        android:id="@+id/seriesPicker"
+        android:theme="@style/AppTheme.Picker"
+        android:layout_width="30dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="10dp"
         app:layout_constraintStart_toEndOf="@+id/series"
         app:layout_constraintTop_toBottomOf="@+id/editExerciseName" />
 
+    <TextView
+        android:id="@+id/weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="Kg"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/exerciseBorgValue"
+        app:layout_constraintStart_toEndOf="@+id/seriesPicker"
+        app:layout_constraintTop_toBottomOf="@+id/editExerciseName" />
+
+    <NumberPicker
+        android:id="@+id/weightPicker"
+        android:theme="@style/AppTheme.Picker"
+        android:layout_width="30dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@+id/weight"
+        app:layout_constraintTop_toBottomOf="@+id/editExerciseName" />
 
     <SeekBar
         android:id="@+id/exerciseBorgValue"
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="match_parent"
         android:layout_height="25dp"
-        android:layout_marginTop="10dp"
         android:background="@drawable/seekbar_bg"
+        android:layout_marginTop="5dp"
         android:max="14"
         android:progress="0"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weight" />
+        app:layout_constraintTop_toBottomOf="@+id/repsPicker" />
 
     <EditText
         android:id="@+id/editNote"

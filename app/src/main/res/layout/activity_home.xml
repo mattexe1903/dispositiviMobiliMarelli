@@ -33,6 +33,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/imgSetting"
+        android:layout_width="60dp"
+        android:layout_height="45dp"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="@+id/searchUserName"
+        app:layout_constraintTop_toTopOf="@+id/hi_text"
+        app:srcCompat="@drawable/settings" />
+
+    <ImageView
         android:id="@+id/imgNewWrk"
         android:layout_width="72dp"
         android:layout_height="55dp"
@@ -78,6 +87,5 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/hi_text"
         app:layout_constraintTop_toBottomOf="@+id/hi_text" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

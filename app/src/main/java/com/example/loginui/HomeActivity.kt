@@ -4,8 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +39,30 @@ class HomeActivity : AppCompatActivity() {
         searchUser()
         setupUI()
         setupListeners()
+
+        val imgSetting: ImageView = findViewById(R.id.imgSetting)
+
+        imgSetting.setOnClickListener {
+            val popupMenu = PopupMenu(this, imgSetting)
+            val inflater: MenuInflater = menuInflater
+            inflater.inflate(R.menu.setting_menu, popupMenu.menu)
+
+            popupMenu.setOnMenuItemClickListener { item: MenuItem ->
+                when (item.itemId) {
+                    R.id.action_profile -> {
+                        true
+                    }
+                    R.id.action_settings -> {
+                        true
+                    }
+                    R.id.action_logout -> {
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popupMenu.show()
+        }
     }
 
 
