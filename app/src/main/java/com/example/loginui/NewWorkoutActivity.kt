@@ -21,7 +21,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.loginui.databinding.NewWorkoutActivity2Binding
+import com.example.loginui.databinding.NewWorkoutActivityBinding
 import com.example.loginui.manager.AuthManager
 import com.example.loginui.manager.NumberPickerManager
 import com.example.loginui.models.RPRModel
@@ -35,7 +35,7 @@ import java.util.Locale
 
 class NewWorkoutActivity : AppCompatActivity() {
 
-    private lateinit var binding: NewWorkoutActivity2Binding
+    private lateinit var binding: NewWorkoutActivityBinding
     private lateinit var db: WorkoutDatabaseHelper
     private lateinit var authManager: AuthManager
     private val handler = Handler(Looper.getMainLooper())
@@ -43,7 +43,7 @@ class NewWorkoutActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = NewWorkoutActivity2Binding.inflate(layoutInflater)
+        binding = NewWorkoutActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         db = WorkoutDatabaseHelper(this)
         authManager = AuthManager()
