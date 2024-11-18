@@ -39,36 +39,7 @@ class HomeActivity : AppCompatActivity() {
         searchUser()
         setupUI()
         setupListeners()
-
-        val imgSetting: ImageView = findViewById(R.id.imgSetting)
-
-        imgSetting.setOnClickListener {
-            val popupMenu = PopupMenu(this, imgSetting)
-            val inflater: MenuInflater = menuInflater
-            inflater.inflate(R.menu.setting_menu, popupMenu.menu)
-
-            popupMenu.setOnMenuItemClickListener { item: MenuItem ->
-                when (item.itemId) {
-                    R.id.action_profile -> {
-                        true
-                    }
-                    R.id.registration_new_clients -> {
-                        val intent = Intent(this, RegistrationNewClient::class.java)
-                        startActivity(intent)
-                        true
-                    }
-                    R.id.action_logout -> {
-                        FirebaseAuth.getInstance().signOut()
-                        val intent = Intent(this, LoginActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                        true
-                    }
-                    else -> false
-                }
-            }
-            popupMenu.show()
-        }
+        setUpMenu()
     }
 
 
@@ -129,6 +100,49 @@ class HomeActivity : AppCompatActivity() {
     }
 
 
+    private fun setUpMenu(){
+        val imgSetting: ImageView = findViewById(R.id.imgSetting)
+
+        imgSetting.setOnClickListener {
+            val popupMenu = PopupMenu(this, imgSetting)
+            val inflater: MenuInflater = menuInflater
+            inflater.inflate(R.menu.setting_menu, popupMenu.menu)
+
+            val userUid = FirebaseAuth.getInstance().currentUser?.uid
+            val managerUid = "2YwrjVbG0hZOH0TTY6AiUH5bAZG2"
+
+            val manageExerciseItem = popupMenu.menu.findItem(R.id.manage_exercise)
+
+            if (userUid == managerUid) {
+                manageExerciseItem.isVisible = true
+            } else {
+                manageExerciseItem.isVisible = false
+            }
+
+            popupMenu.setOnMenuItemClickListener { item: MenuItem ->
+                when (item.itemId) {
+                    R.id.action_profile -> {
+                        true
+                    }
+                    R.id.registration_new_clients -> {
+                        val intent = Intent(this, RegistrationNewClient::class.java)
+                        startActivity(intent)
+                        true
+                    }
+                    R.id.action_logout -> {
+                        FirebaseAuth.getInstance().signOut()
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+            popupMenu.show()
+        }
+    }
 
 
 }
