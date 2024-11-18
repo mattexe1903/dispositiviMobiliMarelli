@@ -4,8 +4,8 @@
         android:id="@+id/action_profile"
         android:title="Profile" />
     <item
-        android:id="@+id/action_settings"
-        android:title="Settings" />
+        android:id="@+id/registration_new_clients"
+        android:title="New client" />
     <item
         android:id="@+id/action_logout"
         android:title="Logout" />

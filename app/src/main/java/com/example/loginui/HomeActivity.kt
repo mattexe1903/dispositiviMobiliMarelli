@@ -8,13 +8,12 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.PopupMenu
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.loginui.databinding.ActivityHomeBinding
+import com.example.loginui.databinding.RegistrationNewClientBinding
 import com.example.loginui.manager.AuthManager
 import com.google.firebase.auth.FirebaseAuth
 
@@ -53,7 +52,9 @@ class HomeActivity : AppCompatActivity() {
                     R.id.action_profile -> {
                         true
                     }
-                    R.id.action_settings -> {
+                    R.id.registration_new_clients -> {
+                        val intent = Intent(this, RegistrationNewClient::class.java)
+                        startActivity(intent)
                         true
                     }
                     R.id.action_logout -> {

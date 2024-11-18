@@ -12,33 +12,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LoginUI"
         tools:targetApi="31" >
+
+        <!-- Activity Registrata Correttamente -->
+        <activity
+            android:name=".RegistrationNewClient"
+            android:exported="false" />
+
         <activity
             android:name=".NewWorkoutActivity"
             android:exported="false" />
-        <activity
-            android:name=".CreateWorkoutActivity"
-            android:exported="false"
-            android:label="@string/title_activity_create_workout"
-            android:theme="@style/Theme.LoginUI.NoActionBar" />
-        <activity
-            android:name=".ScrollingActivity"
-            android:exported="false"
-            android:label="@string/title_activity_scrolling"
-            android:theme="@style/Theme.LoginUI.NoActionBar" />
+
         <activity
             android:name=".HomeActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.LoginUI" />
+
         <activity
             android:name=".RegistrationActivity"
             android:exported="false" />
+
         <activity
             android:name=".LoginActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
