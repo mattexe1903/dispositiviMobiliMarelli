@@ -19,7 +19,7 @@
         android:ems="10"
         android:hint="@string/name"
         android:inputType="text"
-        android:padding="14sp"
+        android:padding="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +40,7 @@
         android:drawableStart="@drawable/person"
         android:drawablePadding="16dp"
         android:hint="@string/surname"
-        android:padding="14sp"
+        android:padding="14dp"
         android:textSize="18sp"
         tools:layout_editor_absoluteX="155dp"
         tools:layout_editor_absoluteY="412dp" />
@@ -59,7 +59,7 @@
         android:drawableStart="@drawable/email"
         android:drawablePadding="16dp"
         android:hint="@string/email"
-        android:padding="14sp"
+        android:padding="14dp"
         android:textSize="18sp"
         tools:layout_editor_absoluteX="112dp"
         tools:layout_editor_absoluteY="661dp" />
