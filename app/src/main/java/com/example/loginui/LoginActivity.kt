@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.example.loginui.databinding.LoginActivityBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 
 class LoginActivity : AppCompatActivity() {
@@ -25,6 +26,9 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
 
+        //NEW
+        checkIfUserLoggedIn()
+
         secretPassword()
         checkLoginCredential()
         createAnAccount()
@@ -32,6 +36,16 @@ class LoginActivity : AppCompatActivity() {
 
 
     //function
+
+    private fun checkIfUserLoggedIn(){
+        val currentUser : FirebaseUser? = firebaseAuth.currentUser
+        if(currentUser!=null){
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun secretPassword(){
         val passwordEditText: EditText = findViewById(R.id.edPassword)

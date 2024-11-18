@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.loginui.databinding.ActivityHomeBinding
 import com.example.loginui.manager.AuthManager
+import com.google.firebase.auth.FirebaseAuth
 
 class HomeActivity : AppCompatActivity() {
 
@@ -56,6 +57,10 @@ class HomeActivity : AppCompatActivity() {
                         true
                     }
                     R.id.action_logout -> {
+                        FirebaseAuth.getInstance().signOut()
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
+                        finish()
                         true
                     }
                     else -> false
