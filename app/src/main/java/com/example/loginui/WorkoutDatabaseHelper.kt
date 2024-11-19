@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.example.loginui.models.RPRModel
 import com.example.loginui.models.ClientModel
+import com.example.loginui.models.ExerciseModel
 import com.example.loginui.models.PersonalTrainerModel
 import com.example.loginui.models.TrainingDetailsModel
 import com.example.loginui.models.TrainingModel
@@ -168,6 +169,18 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
             put(COLUMN_CLIENT_SURNAME, clientModel.surname)
         }
         db.insert(TABLE_CLIENT, null, values)
+        db.close()
+    }
+
+    fun insertExercise(exerciseModel: ExerciseModel){
+        val db = writableDatabase
+        val values = ContentValues().apply{
+            put(COLUMN_EX_NAME, exerciseModel.name)
+            put(COLUMN_EX_CATEGORY, exerciseModel.category)
+            put(COLUMN_EX_PHYSICAL_GOAL, exerciseModel.physicalGoal)
+            put(COLUMN_EX_TYPE, exerciseModel.type)
+        }
+        db.insert(TABLE_EXERCISE, null, values)
         db.close()
     }
 

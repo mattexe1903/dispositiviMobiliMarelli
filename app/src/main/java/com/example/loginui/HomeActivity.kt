@@ -136,6 +136,11 @@ class HomeActivity : AppCompatActivity() {
                         finish()
                         true
                     }
+                    R.id.manage_exercise -> {
+                        val intent = Intent(this, ManageExerciseListActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
                     else -> false
                 }
             }

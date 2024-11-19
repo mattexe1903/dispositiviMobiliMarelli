@@ -13,9 +13,13 @@
         android:theme="@style/Theme.LoginUI"
         tools:targetApi="31" >
 
-        <!-- Activity Registrata Correttamente -->
+
         <activity
             android:name=".RegistrationNewClient"
+            android:exported="false" />
+
+        <activity
+            android:name=".ManageExerciseListActivity"
             android:exported="false" />
 
         <activity
