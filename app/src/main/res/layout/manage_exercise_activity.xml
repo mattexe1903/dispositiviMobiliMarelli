@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black2">
+
+    <EditText
+        android:id="@+id/editNewExerciseName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/round_border"
+        android:ems="10"
+        android:hint="exercise name"
+        android:inputType="text"
+        android:padding="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3" />
+
+    <EditText
+        android:id="@+id/editExerciseCategory"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/round_border"
+        android:ems="10"
+        android:hint="exercise category"
+        android:inputType="text"
+        android:padding="14dp"
+        app:layout_constraintEnd_toEndOf="@+id/editNewExerciseName"
+        app:layout_constraintStart_toStartOf="@+id/editNewExerciseName"
+        app:layout_constraintTop_toBottomOf="@+id/editNewExerciseName" />
+
+    <EditText
+        android:id="@+id/editExercisePhysicalGoal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/round_border"
+        android:ems="10"
+        android:hint="physical goal"
+        android:inputType="text"
+        android:padding="14dp"
+        app:layout_constraintEnd_toEndOf="@+id/editExerciseCategory"
+        app:layout_constraintStart_toStartOf="@+id/editExerciseCategory"
+        app:layout_constraintTop_toBottomOf="@+id/editExerciseCategory" />
+
+    <EditText
+        android:id="@+id/editExerciseType"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/round_border"
+        android:ems="10"
+        android:hint="exercise type"
+        android:inputType="text"
+        android:padding="14dp"
+        app:layout_constraintEnd_toEndOf="@+id/editExercisePhysicalGoal"
+        app:layout_constraintStart_toStartOf="@+id/editExercisePhysicalGoal"
+        app:layout_constraintTop_toBottomOf="@+id/editExercisePhysicalGoal" />
+
+    <Button
+        android:id="@+id/registerNewExercise"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/btn_background"
+        android:text="REGISTER"
+        app:layout_constraintEnd_toEndOf="@+id/editExerciseType"
+        app:layout_constraintHorizontal_bias="0.464"
+        app:layout_constraintStart_toStartOf="@+id/editExerciseType"
+        app:layout_constraintTop_toBottomOf="@+id/editExerciseType" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
