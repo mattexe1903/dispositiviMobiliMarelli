@@ -3,6 +3,7 @@ package com.example.loginui
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.example.loginui.models.RPRModel
@@ -13,6 +14,7 @@ import com.example.loginui.models.TrainingDetailsModel
 import com.example.loginui.models.TrainingModel
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -21,10 +23,9 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
     companion object{
         private const val DATABASE_NAME = "ptl.db"
         private const val DATABASE_VERSION = 1
-        private const val DATABASE_PATH = "/data/data/com.example.loginui/databases/"
     }
 
-    private val dbFilePath: String = DATABASE_PATH + DATABASE_NAME
+    private val dbFilePath: String = context.getDatabasePath(DATABASE_NAME).absolutePath
     private val appContext: Context = context.applicationContext
 
     init{
@@ -38,27 +39,38 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         val dbFile = File(dbFilePath)
         if (dbFile.exists()) {
+            Log.d("DatabaseCheck", "Deleting old database")
             dbFile.delete()
         }
         copyDatabaseIfNeeded()
     }
 
+
     private fun copyDatabaseIfNeeded() {
         val dbFile = File(dbFilePath)
         if (!dbFile.exists()) {
+            Log.d("DatabaseCheck", "Database not found at $dbFilePath, copying...")
+            copyDatabaseFromAssets()
+        } else {
             try {
-                val dbFolder = File(DATABASE_PATH)
-                if (!dbFolder.exists()) {
-                    dbFolder.mkdirs()
-                }
+                val db = SQLiteDatabase.openDatabase(dbFilePath, null, SQLiteDatabase.OPEN_READWRITE)
+                db.close()
+                Log.d("DatabaseCheck", "Database is valid at $dbFilePath")
+            } catch (e: SQLiteException) {
+                Log.e("DatabaseCheck", "Database is corrupt or not valid at $dbFilePath", e)
+                dbFile.delete()
                 copyDatabaseFromAssets()
-            } catch (e: Exception) {
-                e.printStackTrace()
             }
         }
     }
 
     private fun copyDatabaseFromAssets() {
+        val dbFile = File(dbFilePath)
+
+        if (!dbFile.parentFile.exists()) {
+            dbFile.parentFile.mkdirs()
+        }
+
         try {
             val inputStream: InputStream = appContext.assets.open(DATABASE_NAME)
             val outputStream: OutputStream = FileOutputStream(dbFilePath)
@@ -72,10 +84,16 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
             outputStream.flush()
             outputStream.close()
             inputStream.close()
-        } catch (e: Exception) {
+
+            Log.d("DatabaseCopy", "Database copied successfully to $dbFilePath")
+
+        } catch (e: IOException) {
+            Log.e("DatabaseCopy", "Error copying database", e)
             e.printStackTrace()
         }
     }
+
+
 
     override fun getWritableDatabase(): SQLiteDatabase {
         return SQLiteDatabase.openDatabase(dbFilePath, null, SQLiteDatabase.OPEN_READWRITE)
