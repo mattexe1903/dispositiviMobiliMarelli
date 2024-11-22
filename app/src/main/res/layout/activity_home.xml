@@ -36,6 +36,7 @@
         android:id="@+id/imgSetting"
         android:layout_width="60dp"
         android:layout_height="45dp"
+        android:layout_marginEnd="50dp"
         android:clickable="true"
         app:layout_constraintEnd_toEndOf="@+id/searchUserName"
         app:layout_constraintTop_toTopOf="@+id/hi_text"
@@ -77,9 +78,11 @@
 
     <AutoCompleteTextView
         android:id="@+id/searchUserName"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
         android:hint="user name"
         android:inputType="text"
         android:textSize="20sp"
