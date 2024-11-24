@@ -4,8 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.text.toLowerCase
-import com.example.loginui.databinding.ActivityRegistrationBinding
 import com.example.loginui.databinding.RegistrationNewClientBinding
 import com.example.loginui.models.ClientModel
 import com.google.firebase.auth.FirebaseAuth

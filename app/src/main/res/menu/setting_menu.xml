@@ -7,10 +7,14 @@
         android:id="@+id/registration_new_clients"
         android:title="New client" />
     <item
-        android:id="@+id/action_logout"
-        android:title="Logout" />
-    <item
         android:id="@+id/manage_exercise"
         android:title="Manage Exercise"
         android:visible="false"/>
+    <item
+        android:id="@+id/manage_pt"
+        android:title="Personal trainer"
+        android:visible="false"/>
+    <item
+        android:id="@+id/action_logout"
+        android:title="Logout" />
 </menu>

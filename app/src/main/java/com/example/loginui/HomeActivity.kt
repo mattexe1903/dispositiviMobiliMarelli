@@ -112,11 +112,14 @@ class HomeActivity : AppCompatActivity() {
             val managerUid = "2YwrjVbG0hZOH0TTY6AiUH5bAZG2"
 
             val manageExerciseItem = popupMenu.menu.findItem(R.id.manage_exercise)
+            val managePersonalTrainerItem = popupMenu.menu.findItem(R.id.manage_pt)
 
             if (userUid == managerUid) {
                 manageExerciseItem.isVisible = true
+                managePersonalTrainerItem.isVisible = true
             } else {
                 manageExerciseItem.isVisible = false
+                managePersonalTrainerItem.isVisible = false
             }
 
             popupMenu.setOnMenuItemClickListener { item: MenuItem ->
@@ -129,16 +132,21 @@ class HomeActivity : AppCompatActivity() {
                         startActivity(intent)
                         true
                     }
+                    R.id.manage_exercise -> {
+                        val intent = Intent(this, ManageExerciseListActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
+                    R.id.manage_pt -> {
+                        val intent = Intent(this, RegistrationNewPersonalTrainerActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
                     R.id.action_logout -> {
                         FirebaseAuth.getInstance().signOut()
                         val intent = Intent(this, LoginActivity::class.java)
                         startActivity(intent)
                         finish()
-                        true
-                    }
-                    R.id.manage_exercise -> {
-                        val intent = Intent(this, ManageExerciseListActivity::class.java)
-                        startActivity(intent)
                         true
                     }
                     else -> false

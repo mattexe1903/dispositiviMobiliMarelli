@@ -33,7 +33,7 @@
             android:theme="@style/Theme.LoginUI" />
 
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".RegistrationNewPersonalTrainerActivity"
             android:exported="false" />
 
         <activity

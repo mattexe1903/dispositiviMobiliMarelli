@@ -26,12 +26,10 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
 
-        //NEW
         checkIfUserLoggedIn()
-
         secretPassword()
         checkLoginCredential()
-        createAnAccount()
+        //createAnAccount()
     }
 
 
@@ -92,7 +90,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun createAnAccount(){
         binding.signupTxt.setOnClickListener{
-            val intent = Intent(this, RegistrationActivity::class.java)
+            val intent = Intent(this, RegistrationNewPersonalTrainerActivity::class.java)
             startActivity(intent)
         }
     }

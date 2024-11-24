@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/signup_bg"
     android:padding="14sp"
-    tools:context=".RegistrationActivity">
+    tools:context=".RegistrationNewPersonalTrainerActivity">
 
     <TextView
         android:id="@+id/textView"

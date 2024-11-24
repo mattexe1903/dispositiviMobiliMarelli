@@ -3,23 +3,20 @@ package com.example.loginui
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.loginui.databinding.ActivityRegistrationBinding
+import com.example.loginui.databinding.RegistrationNewPtBinding
 import com.example.loginui.models.PersonalTrainerModel
 import com.google.firebase.auth.FirebaseAuth
 
-class RegistrationActivity : AppCompatActivity() {
+class RegistrationNewPersonalTrainerActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityRegistrationBinding
+    private lateinit var binding: RegistrationNewPtBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var db: WorkoutDatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityRegistrationBinding.inflate(layoutInflater)
+        binding = RegistrationNewPtBinding.inflate(layoutInflater)
         setContentView(binding.root)
         db = WorkoutDatabaseHelper(this)
         firebaseAuth = FirebaseAuth.getInstance()
