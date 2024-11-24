@@ -88,11 +88,10 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun createAnAccount(){
+    /*private fun createAnAccount(){
         binding.signupTxt.setOnClickListener{
             val intent = Intent(this, RegistrationNewPersonalTrainerActivity::class.java)
             startActivity(intent)
         }
-    }
-
+    }*/
 }
