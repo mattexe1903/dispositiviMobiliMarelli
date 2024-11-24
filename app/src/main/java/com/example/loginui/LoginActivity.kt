@@ -69,8 +69,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkLoginCredential(){
         binding.loginButton.setOnClickListener{
-            val email = binding.edUserName.text.toString()
-            val password = binding.edPassword.text.toString()
+            val email = binding.edUserName.text.toString().trim()
+            val password = binding.edPassword.text.toString().trim()
 
             if(email.isNotEmpty() && password.isNotEmpty()){
                 firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener{

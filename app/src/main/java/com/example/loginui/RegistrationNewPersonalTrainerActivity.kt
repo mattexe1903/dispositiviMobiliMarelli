@@ -28,13 +28,14 @@ class RegistrationNewPersonalTrainerActivity : AppCompatActivity() {
         binding.signupBt.setOnClickListener {
             val email = binding.edEmail.text.toString().trim()
             val password = binding.edPasswordSU.text.toString().trim()
+
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 firebaseAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             val user = firebaseAuth.currentUser
                             val uid = user?.uid
-                            Toast.makeText(this, "User ID: $uid", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, task.exception?.message ?: "Registration succesfull", Toast.LENGTH_SHORT).show()
                             saveOperatorInfo(uid.toString())
                             val intent = Intent(this, HomeActivity::class.java)
                             startActivity(intent)
