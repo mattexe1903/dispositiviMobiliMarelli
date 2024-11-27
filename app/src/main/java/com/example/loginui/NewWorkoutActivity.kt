@@ -20,6 +20,7 @@ import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material3.DatePickerDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.loginui.databinding.NewWorkoutActivityBinding
 import com.example.loginui.manager.AuthManager
@@ -32,6 +33,9 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import android.app.DatePickerDialog
+import java.util.*
+
 
 class NewWorkoutActivity : AppCompatActivity() {
 
@@ -51,6 +55,7 @@ class NewWorkoutActivity : AppCompatActivity() {
 
         searchUser()
         setDefaultDate()
+        setDate()
         countdownSection()
         addNewBoxInContainer()
         rprSection()
@@ -86,6 +91,25 @@ class NewWorkoutActivity : AppCompatActivity() {
 
         val formattedDate = String.format("%02d/%02d/%d", day, month, year)
         binding.editDate.setText(formattedDate)
+    }
+
+    private fun setDate(){
+        binding.editDate.setOnClickListener{
+            val calendar = Calendar.getInstance()
+
+            val datePickerDialog = DatePickerDialog(this, {_, year: Int, monthOfYear: Int, dayOfMonth: Int->
+                val selectDate = Calendar.getInstance()
+                selectDate.set(year, monthOfYear, dayOfMonth)
+                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val formattedDate = dateFormat.format(selectDate.time)
+                binding.editDate.setText(formattedDate)
+            },
+           calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            )
+            datePickerDialog.show()
+        }
     }
 
     private fun calculateAndDisplayAverage(mood: EditText, energy: EditText, doms: EditText, sleep: EditText, resultTextView: TextView) {
