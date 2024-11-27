@@ -40,6 +40,7 @@ class NewWorkoutActivity : AppCompatActivity() {
     private lateinit var authManager: AuthManager
     private val handler = Handler(Looper.getMainLooper())
     private var workoutDuration: Long=0
+    private var selectedUserId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +49,8 @@ class NewWorkoutActivity : AppCompatActivity() {
         db = WorkoutDatabaseHelper(this)
         authManager = AuthManager()
 
+        searchUser()
         setDefaultDate()
-
         countdownSection()
         addNewBoxInContainer()
         rprSection()
@@ -58,6 +59,24 @@ class NewWorkoutActivity : AppCompatActivity() {
 
 
     //FUNCTION
+    private fun searchUser(){
+        val editUserName = this.findViewById<AutoCompleteTextView>(R.id.searchUserNameNewWorkout)
+        val users = db.getUsersName("")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, users)
+        editUserName.setAdapter(adapter)
+
+        editUserName.setOnItemClickListener { parent, view, position, id ->
+            val selectedUserName = parent.getItemAtPosition(position) as String
+            val parts = selectedUserName.split(" ")
+            val name = if (parts.isNotEmpty()) parts[0] else ""
+            val surname = if (parts.size > 1) parts[1] else ""
+            val clientId = db.getUserIdByNameAndSurname(name, surname)
+
+            if (clientId != null) {
+                selectedUserId = clientId
+            }
+        }
+    }
 
     private fun setDefaultDate(){
         val calendar = Calendar.getInstance()
@@ -176,8 +195,7 @@ class NewWorkoutActivity : AppCompatActivity() {
 
     private fun saveWorkout(){
         binding.saveButton.setOnClickListener{
-            val clientName = binding.editName.text.toString()
-            val clientSurname = binding.editSurname.text.toString()
+
             val editDate: EditText = findViewById(R.id.editDate)
             val dateText: String = editDate.text.toString()
             val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -185,7 +203,8 @@ class NewWorkoutActivity : AppCompatActivity() {
             try {
                 val date: Date = formatter.parse(dateText)
                 val formattedDate = formatter.format(date)
-                val userId = db.getUserIdByNameAndSurname(clientName, clientSurname).toString()
+                //val userId = db.getUserIdByNameAndSurname(clientName, clientSurname).toString()
+                val userId = selectedUserId
                 val containerBox = binding.container
                 val allValues = mutableListOf<TrainingDetailsModel>()
                 val ptId = authManager.getCurrentUserUid()
@@ -193,11 +212,11 @@ class NewWorkoutActivity : AppCompatActivity() {
                 var overallBorg = 0
                 var exerciseCount =0
 
-                if(userId != "null"){
+                if(userId != null){
                     //TODO adjust with autoincremental id
                     val trainingId = db.countTrainingRows()+1
-                    val workoutNumber = db.getWorkoutNumberByClientId(userId)
-                    val trainingModel = TrainingModel(trainingId, formattedDate, formatTime(workoutDuration), userId, ptId.toString(), workoutNumber)
+                    val workoutNumber = db.getWorkoutNumberByClientId(userId.toString())
+                    val trainingModel = TrainingModel(trainingId, formattedDate, formatTime(workoutDuration), userId.toString(), ptId.toString(), workoutNumber)
                     db.insertTraining(trainingModel)
 
                     val mood = binding.edMoodValue.text.toString()
@@ -249,7 +268,7 @@ class NewWorkoutActivity : AppCompatActivity() {
                     }
 
                     val avarageBorg = if(exerciseCount>0) overallBorg/exerciseCount else 0
-                    val rprModel = RPRModel(0, userId, mood, sleep, energy, doms, index, avarageBorg.toString(), trainingId)
+                    val rprModel = RPRModel(0, userId.toString(), mood, sleep, energy, doms, index, avarageBorg.toString(), trainingId)
                     db.insertRPR(rprModel)
 
                     for (item in allValues) {

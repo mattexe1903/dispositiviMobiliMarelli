@@ -62,23 +62,24 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun searchUser() {
-        val editExercise = this.findViewById<AutoCompleteTextView>(R.id.searchUserName)
+        val editUserName = this.findViewById<AutoCompleteTextView>(R.id.searchUserName)
         val users = db.getUsersName("")
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, users)
-        editExercise.setAdapter(adapter)
+        editUserName.setAdapter(adapter)
 
-        editExercise.setOnItemClickListener { parent, view, position, id ->
+        editUserName.setOnItemClickListener { parent, view, position, id ->
             val selectedUserName = parent.getItemAtPosition(position) as String
             val parts = selectedUserName.split(" ")
             val name = if (parts.isNotEmpty()) parts[0] else ""
             val surname = if (parts.size > 1) parts[1] else ""
             val clientId = db.getUserIdByNameAndSurname(name, surname)
+
             selectedUserId = clientId.toString()
 
             workoutSummaryAdapter.refreshData(db.getTrainingByClientId(selectedUserId.toString()))
         }
 
-        editExercise.addTextChangedListener(object : TextWatcher {
+        editUserName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
