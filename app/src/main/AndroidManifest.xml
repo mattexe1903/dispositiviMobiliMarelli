@@ -16,29 +16,35 @@
 
         <activity
             android:name=".RegistrationNewClient"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".ManageExerciseListActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".NewWorkoutActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".HomeActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LoginUI" />
 
         <activity
             android:name=".RegistrationNewPersonalTrainerActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
             android:name=".LoginActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
