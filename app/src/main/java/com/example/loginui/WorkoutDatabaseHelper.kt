@@ -224,6 +224,18 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         return id
     }
 
+    fun getExerciseNameFromId(id:Int):String{
+        val db = readableDatabase
+        val query = "SELECT name FROM exercise WHERE id=?"
+        val cursor = db.rawQuery(query, arrayOf(id.toString()))
+        var name: String?= null
+        if(cursor.moveToFirst()){
+            name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+        }
+        cursor.close()
+        return name.toString()
+    }
+
     fun getExercisesName(query: String): List<String> {
         val db = this.readableDatabase
         val selection = "name LIKE ?"
@@ -392,6 +404,52 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
                 cursor.getInt(cursor.getColumnIndexOrThrow("isDraft"))
             )
             trainingList.add(training)
+        }
+        cursor.close()
+        db.close()
+        return trainingList
+    }
+
+    fun getTrainingById(id : Int): TrainingModel? {
+        var training : TrainingModel ?= null
+        val db = readableDatabase
+        val query = "SELECT * FROM training WHERE id = ?"
+        val cursor = db.rawQuery(query, arrayOf(id.toString()))
+        if (cursor.moveToFirst()) {
+            training = TrainingModel(
+                cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                cursor.getString(cursor.getColumnIndexOrThrow("date")),
+                cursor.getString(cursor.getColumnIndexOrThrow("duration")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("client")).toString(),
+                cursor.getInt(cursor.getColumnIndexOrThrow("operator")).toString(),
+                cursor.getInt(cursor.getColumnIndexOrThrow("workoutNumber")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("isDraft"))
+            )
+        }
+        cursor.close()
+        db.close()
+        return training
+    }
+
+    fun getTrainingDetailsByTrainingId(trainingId: String): List<TrainingDetailsModel>{
+        val trainingList = mutableListOf<TrainingDetailsModel>()
+        val db = readableDatabase
+        val query = "SELECT * FROM trainingDetails WHERE training = ?"
+        val cursor = db.rawQuery(query, arrayOf(trainingId))
+        while (cursor.moveToNext()) {
+            val trainingDetails = TrainingDetailsModel(
+                cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                cursor.getString(cursor.getColumnIndexOrThrow("reps")),
+                cursor.getString(cursor.getColumnIndexOrThrow("sets")),
+                cursor.getString(cursor.getColumnIndexOrThrow("weight")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("training")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("exercise")),
+                cursor.getString(cursor.getColumnIndexOrThrow("executionTime")),
+                cursor.getString(cursor.getColumnIndexOrThrow("note")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("borg"))
+            )
+            trainingList.add(trainingDetails)
+
         }
         cursor.close()
         db.close()

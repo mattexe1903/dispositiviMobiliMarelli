@@ -38,7 +38,7 @@ class DraftBoxAdapter (private var trainings: List<TrainingModel>, context: Cont
         holder.cardView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, NewWorkoutActivity::class.java)
-            intent.putExtra("DRAFT_ID", trainingId)
+            intent.putExtra("TRAINING_ID", trainingId)
             context.startActivity(intent)
         }
     }
