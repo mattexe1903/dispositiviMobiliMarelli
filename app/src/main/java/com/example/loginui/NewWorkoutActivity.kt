@@ -218,116 +218,124 @@ class NewWorkoutActivity : AppCompatActivity() {
 
     private fun saveWorkout(){
         binding.saveButton.setOnClickListener{
-
             val editDate: EditText = findViewById(R.id.editDate)
             val dateText: String = editDate.text.toString()
             val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-
             val selectedDate: Date = formatter.parse(dateText)
             val today = Calendar.getInstance().time
+
             if(selectedDate.after(today)){
                 showDateDialog()
             }else {
-                try {
-                    //val date: Date = formatter.parse(dateText)
-                    val formattedDate = formatter.format(selectedDate)
-                    val userId = selectedUserId
-                    val containerBox = binding.container
-                    val allValues = mutableListOf<TrainingDetailsModel>()
-                    val ptId = authManager.getCurrentUserUid()
-
-                    var overallBorg = 0
-                    var exerciseCount = 0
-
-                    if (userId != null) {
-                        //TODO adjust with autoincremental id
-                        val trainingId = db.countTrainingRows() + 1
-                        val workoutNumber = db.getWorkoutNumberByClientId(userId.toString())
-                        val trainingModel = TrainingModel(
-                            trainingId,
-                            formattedDate,
-                            formatTime(workoutDuration),
-                            userId.toString(),
-                            ptId.toString(),
-                            workoutNumber
-                        )
-                        db.insertTraining(trainingModel)
-
-                        val mood = binding.edMoodValue.text.toString()
-                        val energy = binding.edEnergyValue.text.toString()
-                        val doms = binding.edDomsValue.text.toString()
-                        val sleep = binding.edSleepValue.text.toString()
-                        val index = binding.indexValue.text.toString()
-
-                        for (i in 0 until containerBox.childCount) {
-                            val box = containerBox.getChildAt(i)
-
-                            val exerciseName =
-                                box.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
-                            val exerciseId = db.getExerciseIdFromName(exerciseName.text.toString())
-                            val reps = box.findViewById<NumberPicker>(R.id.repsPicker)
-                            val sets = box.findViewById<NumberPicker>(R.id.seriesPicker)
-                            val weight = box.findViewById<NumberPicker>(R.id.weightPicker)
-                            val note = box.findViewById<EditText>(R.id.editNote)
-                            val seekBar: SeekBar = box.findViewById(R.id.exerciseBorgValue)
-                            val borg: Int = seekBar.progress + 6
-                            overallBorg += borg
-                            exerciseCount++
-
-                            val switchedTimeOption = box.findViewById<Switch>(R.id.switchTimeOption)
-                            val executionTime: String = if (switchedTimeOption.isChecked) {
-                                box.findViewById<EditText>(R.id.editManualDuration).text.toString()
-                            } else {
-                                box.findViewById<TextView>(R.id.timerTextView).text.toString()
-                            }
-                            val durationInSeconds = parseDuration(executionTime)
-
-                            //TODO check if this control-if is necessary for the correct functionality
-                            if (exerciseId != null && reps != null && sets != null && weight != null && executionTime != null) {
-                                allValues.add(
-                                    TrainingDetailsModel(
-                                        0,
-                                        reps.value.toString(),
-                                        sets.value.toString(),
-                                        weight.value.toString(),
-                                        trainingId,
-                                        exerciseId,
-                                        note.text.toString(),
-                                        durationInSeconds.toString(),
-                                        borg
-                                    )
-                                )
-                            } else {
-                                Toast.makeText(this, "problem null", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-
-                        val avarageBorg = if (exerciseCount > 0) overallBorg / exerciseCount else 0
-                        val rprModel = RPRModel(
-                            0,
-                            userId.toString(),
-                            mood,
-                            sleep,
-                            energy,
-                            doms,
-                            index,
-                            avarageBorg.toString(),
-                            trainingId
-                        )
-                        db.insertRPR(rprModel)
-
-                        for (item in allValues) {
-                            db.insertTrainingDetails(item)
-                        }
-                        finish()
-                        Toast.makeText(this, "workout saved", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this, "user not found", Toast.LENGTH_SHORT).show()
-                    }
-                } catch (e: ParseException) {
-                    Toast.makeText(this, "date not valid", Toast.LENGTH_SHORT).show()
-                }
+                registerWorkoutIntoDatabase()
             }
+        }
+    }
+
+    private fun registerWorkoutIntoDatabase(){
+        try {
+            val editDate: EditText = findViewById(R.id.editDate)
+            val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val dateText: String = editDate.text.toString()
+            val selectedDate: Date = formatter.parse(dateText)
+
+            val formattedDate = formatter.format(selectedDate)
+            val userId = selectedUserId
+            val containerBox = binding.container
+            val allValues = mutableListOf<TrainingDetailsModel>()
+            val ptId = authManager.getCurrentUserUid()
+
+            var overallBorg = 0
+            var exerciseCount = 0
+
+            if (userId != null) {
+                //TODO adjust with autoincremental id
+                val trainingId = db.countTrainingRows() + 1
+                val workoutNumber = db.getWorkoutNumberByClientId(userId.toString())
+                val trainingModel = TrainingModel(
+                    trainingId,
+                    formattedDate,
+                    formatTime(workoutDuration),
+                    userId.toString(),
+                    ptId.toString(),
+                    workoutNumber,
+                    0
+                )
+                db.insertTraining(trainingModel)
+
+                val mood = binding.edMoodValue.text.toString()
+                val energy = binding.edEnergyValue.text.toString()
+                val doms = binding.edDomsValue.text.toString()
+                val sleep = binding.edSleepValue.text.toString()
+                val index = binding.indexValue.text.toString()
+
+                for (i in 0 until containerBox.childCount) {
+                    val box = containerBox.getChildAt(i)
+
+                    val exerciseName =
+                        box.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
+                    val exerciseId = db.getExerciseIdFromName(exerciseName.text.toString())
+                    val reps = box.findViewById<NumberPicker>(R.id.repsPicker)
+                    val sets = box.findViewById<NumberPicker>(R.id.seriesPicker)
+                    val weight = box.findViewById<NumberPicker>(R.id.weightPicker)
+                    val note = box.findViewById<EditText>(R.id.editNote)
+                    val seekBar: SeekBar = box.findViewById(R.id.exerciseBorgValue)
+                    val borg: Int = seekBar.progress + 6
+                    overallBorg += borg
+                    exerciseCount++
+
+                    val switchedTimeOption = box.findViewById<Switch>(R.id.switchTimeOption)
+                    val executionTime: String = if (switchedTimeOption.isChecked) {
+                        box.findViewById<EditText>(R.id.editManualDuration).text.toString()
+                    } else {
+                        box.findViewById<TextView>(R.id.timerTextView).text.toString()
+                    }
+                    val durationInSeconds = parseDuration(executionTime)
+
+                    //TODO check if this control-if is necessary for the correct functionality
+                    if (exerciseId != null && reps != null && sets != null && weight != null && executionTime != null) {
+                        allValues.add(
+                            TrainingDetailsModel(
+                                0,
+                                reps.value.toString(),
+                                sets.value.toString(),
+                                weight.value.toString(),
+                                trainingId,
+                                exerciseId,
+                                note.text.toString(),
+                                durationInSeconds.toString(),
+                                borg
+                            )
+                        )
+                    } else {
+                        Toast.makeText(this, "problem null", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                val avarageBorg = if (exerciseCount > 0) overallBorg / exerciseCount else 0
+                val rprModel = RPRModel(
+                    0,
+                    userId.toString(),
+                    mood,
+                    sleep,
+                    energy,
+                    doms,
+                    index,
+                    avarageBorg.toString(),
+                    trainingId
+                )
+                db.insertRPR(rprModel)
+
+                for (item in allValues) {
+                    db.insertTrainingDetails(item)
+                }
+                finish()
+                Toast.makeText(this, "workout saved", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "user not found", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: ParseException) {
+            Toast.makeText(this, "date not valid", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -405,11 +413,118 @@ class NewWorkoutActivity : AppCompatActivity() {
         }
 
         builder.setNegativeButton("Salva nelle bozze") { dialog, _ ->
-            //saveWorkoutAsDraft()
+            saveWorkoutAsDraft()
             dialog.dismiss()
         }
 
         val dialog = builder.create()
         dialog.show()
+    }
+
+    private fun saveWorkoutAsDraft(){
+        try {
+            val editDate: EditText = findViewById(R.id.editDate)
+            val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val dateText: String = editDate.text.toString()
+            val selectedDate: Date = formatter.parse(dateText)
+
+            val formattedDate = formatter.format(selectedDate)
+            val userId = selectedUserId
+            val containerBox = binding.container
+            val allValues = mutableListOf<TrainingDetailsModel>()
+            val ptId = authManager.getCurrentUserUid()
+
+            var overallBorg = 0
+            var exerciseCount = 0
+
+            if (userId != null) {
+                //TODO adjust with autoincremental id
+                val trainingId = db.countTrainingRows() + 1
+                val workoutNumber = db.getWorkoutNumberByClientId(userId.toString())
+                val trainingModel = TrainingModel(
+                    trainingId,
+                    formattedDate,
+                    formatTime(workoutDuration),
+                    userId.toString(),
+                    ptId.toString(),
+                    workoutNumber,
+                    1
+                )
+                db.insertTraining(trainingModel)
+
+                val mood = binding.edMoodValue.text.toString()
+                val energy = binding.edEnergyValue.text.toString()
+                val doms = binding.edDomsValue.text.toString()
+                val sleep = binding.edSleepValue.text.toString()
+                val index = binding.indexValue.text.toString()
+
+                for (i in 0 until containerBox.childCount) {
+                    val box = containerBox.getChildAt(i)
+
+                    val exerciseName =
+                        box.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
+                    val exerciseId = db.getExerciseIdFromName(exerciseName.text.toString())
+                    val reps = box.findViewById<NumberPicker>(R.id.repsPicker)
+                    val sets = box.findViewById<NumberPicker>(R.id.seriesPicker)
+                    val weight = box.findViewById<NumberPicker>(R.id.weightPicker)
+                    val note = box.findViewById<EditText>(R.id.editNote)
+                    val seekBar: SeekBar = box.findViewById(R.id.exerciseBorgValue)
+                    val borg: Int = seekBar.progress + 6
+                    overallBorg += borg
+                    exerciseCount++
+
+                    val switchedTimeOption = box.findViewById<Switch>(R.id.switchTimeOption)
+                    val executionTime: String = if (switchedTimeOption.isChecked) {
+                        box.findViewById<EditText>(R.id.editManualDuration).text.toString()
+                    } else {
+                        box.findViewById<TextView>(R.id.timerTextView).text.toString()
+                    }
+                    val durationInSeconds = parseDuration(executionTime)
+
+                    //TODO check if this control-if is necessary for the correct functionality
+                    if (exerciseId != null && reps != null && sets != null && weight != null && executionTime != null) {
+                        allValues.add(
+                            TrainingDetailsModel(
+                                0,
+                                reps.value.toString(),
+                                sets.value.toString(),
+                                weight.value.toString(),
+                                trainingId,
+                                exerciseId,
+                                note.text.toString(),
+                                durationInSeconds.toString(),
+                                borg
+                            )
+                        )
+                    } else {
+                        Toast.makeText(this, "problem null", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                val avarageBorg = if (exerciseCount > 0) overallBorg / exerciseCount else 0
+                val rprModel = RPRModel(
+                    0,
+                    userId.toString(),
+                    mood,
+                    sleep,
+                    energy,
+                    doms,
+                    index,
+                    avarageBorg.toString(),
+                    trainingId
+                )
+                db.insertRPR(rprModel)
+
+                for (item in allValues) {
+                    db.insertTrainingDetails(item)
+                }
+                finish()
+                Toast.makeText(this, "draft saved", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "user not found", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: ParseException) {
+            Toast.makeText(this, "date not valid", Toast.LENGTH_SHORT).show()
+        }
     }
 }

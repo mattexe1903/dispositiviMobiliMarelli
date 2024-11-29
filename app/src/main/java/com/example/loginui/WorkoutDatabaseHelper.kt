@@ -151,6 +151,7 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
             put("client", training.clientId)
             put("operator", training.personalTrainerId)
             put("workoutNumber", training.workoutNumber)
+            put("isDraft", training.isDraft)
         }
         db.insert("training", null, values)
         db.close()
@@ -295,7 +296,8 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
                 cursor.getString(cursor.getColumnIndexOrThrow("duration")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("client")).toString(),
                 cursor.getInt(cursor.getColumnIndexOrThrow("operator")).toString(),
-                cursor.getInt(cursor.getColumnIndexOrThrow("workoutNumber"))
+                cursor.getInt(cursor.getColumnIndexOrThrow("workoutNumber")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("isDraft"))
             )
             trainingList.add(training)
         }
