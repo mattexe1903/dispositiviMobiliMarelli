@@ -37,8 +37,6 @@ import android.app.DatePickerDialog
 import java.util.*
 
 
-//prova di merge
-
 class NewWorkoutActivity : AppCompatActivity() {
 
     private lateinit var binding: NewWorkoutActivityBinding
