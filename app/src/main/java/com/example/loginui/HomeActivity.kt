@@ -40,6 +40,7 @@ class HomeActivity : AppCompatActivity() {
         setupUI()
         setupListeners()
         setUpMenu()
+        setUpDraftSection()
     }
 
 
@@ -53,6 +54,13 @@ class HomeActivity : AppCompatActivity() {
     private fun setupListeners(){
         binding.imgNewWrk.setOnClickListener{
             val intent = Intent(this, NewWorkoutActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun setUpDraftSection(){
+        binding.imgDraftWorkout.setOnClickListener{
+            val intent = Intent(this, DraftActivity::class.java)
             startActivity(intent)
         }
     }
