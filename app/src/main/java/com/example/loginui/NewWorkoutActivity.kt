@@ -34,9 +34,6 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import android.app.DatePickerDialog
-import java.util.*
-
-//2334
 
 class NewWorkoutActivity : AppCompatActivity() {
 
@@ -228,7 +225,6 @@ class NewWorkoutActivity : AppCompatActivity() {
             try {
                 val date: Date = formatter.parse(dateText)
                 val formattedDate = formatter.format(date)
-                //val userId = db.getUserIdByNameAndSurname(clientName, clientSurname).toString()
                 val userId = selectedUserId
                 val containerBox = binding.container
                 val allValues = mutableListOf<TrainingDetailsModel>()
