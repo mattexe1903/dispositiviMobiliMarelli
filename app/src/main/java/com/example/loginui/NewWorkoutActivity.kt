@@ -36,8 +36,7 @@ import java.util.Locale
 import android.app.DatePickerDialog
 import java.util.*
 
-
-//prova di merge
+//2334
 
 class NewWorkoutActivity : AppCompatActivity() {
 
