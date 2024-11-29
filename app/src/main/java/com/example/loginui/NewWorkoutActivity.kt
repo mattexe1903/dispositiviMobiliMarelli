@@ -52,13 +52,25 @@ class NewWorkoutActivity : AppCompatActivity() {
         db = WorkoutDatabaseHelper(this)
         authManager = AuthManager()
 
-        searchUser()
-        setDefaultDate()
-        setDate()
-        countdownSection()
-        addNewBoxInContainer()
-        rprSection()
-        saveWorkout()
+        //NEW
+        val draftId = intent.getIntExtra("TRAINING_ID", -1)
+        if(draftId != -1){
+            loadDraftData(draftId)
+            searchUser()
+            setDate()
+            countdownSection()
+            addNewBoxInContainer()
+            rprSection()
+            saveWorkout()
+        }else{
+            searchUser()
+            setDefaultDate()
+            setDate()
+            countdownSection()
+            addNewBoxInContainer()
+            rprSection()
+            saveWorkout()
+        }
     }
 
 
@@ -184,6 +196,7 @@ class NewWorkoutActivity : AppCompatActivity() {
             numberPickerManager.configureSetsPicker(sets)
             val weight = newBox.findViewById<NumberPicker>(R.id.weightPicker)
             numberPickerManager.configureWeightPicker(weight)
+
 
             binding.container.addView(newBox, 0)
         }
@@ -527,4 +540,45 @@ class NewWorkoutActivity : AppCompatActivity() {
             Toast.makeText(this, "date not valid", Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun loadDraftData(draftId: Int) {
+        val draft = db.getTrainingById(draftId)
+        val rpr = db.getRprByTrainingId(draftId.toString())
+        val clientNameSurname = draft?.clientId?.let { db.getClientById(it) }
+
+        if (draft != null) {
+            binding.searchUserNameNewWorkout.setText(clientNameSurname)
+            binding.editDate.setText(draft.date)
+            selectedUserId = draft.clientId.toInt()
+            workoutDuration = parseDuration(draft.duration)
+
+            binding.edDomsValue.setText(rpr?.doms)
+            binding.edSleepValue.setText(rpr?.sleep)
+            binding.edEnergyValue.setText(rpr?.energy)
+            binding.edMoodValue.setText(rpr?.mood)
+
+            val exercises = db.getTrainingDetailsByTrainingId(draftId.toString())
+            exercises.forEach { exercise ->
+                val newBox = LayoutInflater.from(this).inflate(R.layout.exercise_box, binding.container, false)
+                val editExercise = newBox.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
+                val reps = newBox.findViewById<NumberPicker>(R.id.repsPicker)
+                val sets = newBox.findViewById<NumberPicker>(R.id.seriesPicker)
+                val weight = newBox.findViewById<NumberPicker>(R.id.weightPicker)
+                val note = newBox.findViewById<EditText>(R.id.editNote)
+                val seekBar = newBox.findViewById<SeekBar>(R.id.exerciseBorgValue)
+
+                editExercise.setText(exercise.exerciseId?.let { db.getExerciseNameFromId(it) })
+                reps.value = exercise.reps.toInt()
+                sets.value = exercise.sets.toInt()
+                weight.value = exercise.weight.toInt()
+                note.setText(exercise.note)
+                seekBar.progress = exercise.borg - 6
+
+                binding.container.addView(newBox, 0)
+            }
+        } else {
+            Toast.makeText(this, "Errore: bozza non trovata", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 }
