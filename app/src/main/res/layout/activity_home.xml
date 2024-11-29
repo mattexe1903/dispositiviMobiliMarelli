@@ -67,6 +67,19 @@
         app:layout_constraintTop_toTopOf="@+id/toolbar"
         app:srcCompat="@drawable/graphics" />
 
+    <ImageView
+        android:id="@+id/imgDraftWorkout"
+        android:layout_width="72dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:contentDescription="imgGraph"
+        app:layout_constraintStart_toEndOf="@+id/imgGraph"
+        app:layout_constraintTop_toTopOf="@+id/toolbar"
+        app:srcCompat="@drawable/draft_workout" />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/trainingsRecyclerView"
         android:layout_width="match_parent"
