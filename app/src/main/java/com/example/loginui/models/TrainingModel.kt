@@ -6,5 +6,6 @@ data class TrainingModel(
     val duration: String,
     val clientId: String,
     val personalTrainerId: String,
-    val workoutNumber: Int
+    val workoutNumber: Int,
+    val isDraft: Int //0=false 1=true
 )
