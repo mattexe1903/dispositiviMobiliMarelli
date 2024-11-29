@@ -376,4 +376,25 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         return activeTime
     }
 
+    fun getDraftWorkout(): List<TrainingModel>{
+        val trainingList = mutableListOf<TrainingModel>()
+        val db = readableDatabase
+        val query = "SELECT * FROM training WHERE isDraft=1"
+        val cursor = db.rawQuery(query, null)
+        while (cursor.moveToNext()) {
+            val training = TrainingModel(
+                cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                cursor.getString(cursor.getColumnIndexOrThrow("date")),
+                cursor.getString(cursor.getColumnIndexOrThrow("duration")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("client")).toString(),
+                cursor.getInt(cursor.getColumnIndexOrThrow("operator")).toString(),
+                cursor.getInt(cursor.getColumnIndexOrThrow("workoutNumber")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("isDraft"))
+            )
+            trainingList.add(training)
+        }
+        cursor.close()
+        db.close()
+        return trainingList
+    }
 }
