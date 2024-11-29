@@ -20,6 +20,11 @@
             android:screenOrientation="portrait"/>
 
         <activity
+            android:name=".DraftActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name=".ManageExerciseListActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
