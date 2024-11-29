@@ -20,5 +20,6 @@ class DraftActivity : AppCompatActivity() {
 
         binding.draftRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.draftRecyclerView.adapter = draftBoxAdapter
+
     }
 }
