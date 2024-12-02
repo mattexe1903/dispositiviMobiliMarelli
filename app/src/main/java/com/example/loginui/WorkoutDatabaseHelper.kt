@@ -142,10 +142,9 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         db.close()
     }
 
-    fun insertTraining(training: TrainingModel){
-        val db= writableDatabase
-        val values = ContentValues().apply{
-            put("id", training.id)
+    fun insertTraining(training: TrainingModel): Int {
+        val db = writableDatabase
+        val values = ContentValues().apply {
             put("date", training.date)
             put("duration", training.duration)
             put("client", training.clientId)
@@ -153,8 +152,10 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
             put("workoutNumber", training.workoutNumber)
             put("isDraft", training.isDraft)
         }
-        db.insert("training", null, values)
+
+        val id = db.insert("training", null, values)
         db.close()
+        return id.toInt()
     }
 
     fun insertTrainingDetails(trainingDetails: TrainingDetailsModel){

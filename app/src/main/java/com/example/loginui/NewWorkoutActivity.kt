@@ -60,7 +60,7 @@ class NewWorkoutActivity : AppCompatActivity() {
             countdownSection()
             addNewBoxInContainer()
             rprSection()
-            saveWorkout()
+            updateDraft(draftId)
         }else{
             searchUser()
             setDefaultDate()
@@ -243,18 +243,22 @@ class NewWorkoutActivity : AppCompatActivity() {
 
             val today = Calendar.getInstance().time
             val isFutureDate = selectedDate.after(today)
-            val areRPRValuesMissing = binding.edMoodValue.text.isNullOrBlank()
-                    || binding.edEnergyValue.text.isNullOrBlank()
-                    || binding.edDomsValue.text.isNullOrBlank()
-                    || binding.edSleepValue.text.isNullOrBlank()
 
-            if (draftId == null) {
-                registerWorkoutIntoDatabase()
-            } else if (isFutureDate || areRPRValuesMissing) {
-                showDateDialog()
-            } else {
+            if (draftId != null) {
                 saveWorkoutModifications(draftId)
+            } else {
+                if (isFutureDate) {
+                    showDateDialog()
+                } else {
+                    registerWorkoutIntoDatabase()
+                }
             }
+        }
+    }
+
+    private fun updateDraft(draftId: Int){
+        binding.saveButton.setOnClickListener {
+            saveWorkoutModifications(draftId)
         }
     }
 
@@ -464,11 +468,9 @@ class NewWorkoutActivity : AppCompatActivity() {
             var exerciseCount = 0
 
             if (userId != null) {
-                //TODO adjust with autoincremental id
-                val trainingId = db.countTrainingRows() + 1
                 val workoutNumber = db.getWorkoutNumberByClientId(userId.toString())
                 val trainingModel = TrainingModel(
-                    trainingId,
+                    0,
                     formattedDate,
                     formatTime(workoutDuration),
                     userId.toString(),
@@ -476,7 +478,7 @@ class NewWorkoutActivity : AppCompatActivity() {
                     workoutNumber,
                     1
                 )
-                db.insertTraining(trainingModel)
+                val trainingId = db.insertTraining(trainingModel)
 
                 val mood = binding.edMoodValue.text.toString()
                 val energy = binding.edEnergyValue.text.toString()
@@ -594,8 +596,8 @@ class NewWorkoutActivity : AppCompatActivity() {
 
                 binding.container.addView(newBox, 0)
 
-                saveWorkout(draftId)
             }
+            //saveWorkout(draftId)
         } else {
             Toast.makeText(this, "Errore: bozza non trovata", Toast.LENGTH_SHORT).show()
         }
@@ -695,7 +697,7 @@ class NewWorkoutActivity : AppCompatActivity() {
                     averageBorg.toString(),
                     trainingId
                 )
-                db.updateRPR(rprModel) // Aggiorniamo invece di inserire un nuovo record.
+                //pdb.updateRPR(rprModel)
 
                 for (item in allValues) {
                     db.updateTrainingDetails(item) // Aggiorniamo i dettagli dell'esercizio.
@@ -713,6 +715,7 @@ class NewWorkoutActivity : AppCompatActivity() {
         } catch (e: ParseException) {
             Toast.makeText(this, "Data non valida", Toast.LENGTH_SHORT).show()
         }
+        finish()
     }
 
 }
