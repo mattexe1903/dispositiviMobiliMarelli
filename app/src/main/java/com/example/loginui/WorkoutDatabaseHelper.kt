@@ -455,4 +455,79 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         db.close()
         return trainingList
     }
+
+    fun updateRPR(rpr: RPRModel): Boolean {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("id", rpr.id)
+            put("client", rpr.clientID)
+            put("mood", rpr.mood)
+            put("sleep", rpr.sleep)
+            put("energy", rpr.energy)
+            put("doms", rpr.doms)
+            put("index", rpr.index)
+            put("avg", rpr.borg)
+            put("training", rpr.training)
+        }
+
+        val rowsAffected = db.update(
+            "rpr",
+            values,
+            "id = ?",
+            arrayOf(rpr.id.toString())
+        )
+
+        db.close()
+        return rowsAffected > 0
+    }
+
+    fun updateTraining(training: TrainingModel): Boolean {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("id", training.id)
+            put("date", training.date)
+            put("duration", training.duration)
+            put("client", training.clientId)
+            put("operator", training.personalTrainerId)
+            put("workoutNumber", training.workoutNumber)
+            put("isDraft", training.isDraft)
+        }
+
+        val rowsAffected = db.update(
+            "training",
+            values,
+            "id = ?",
+            arrayOf(training.id.toString())
+        )
+
+        db.close()
+        return rowsAffected > 0
+    }
+
+    fun updateTrainingDetails(trainingDetails: TrainingDetailsModel): Boolean {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("id", trainingDetails.id)
+            put("reps", trainingDetails.reps)
+            put("sets", trainingDetails.sets)
+            put("weight", trainingDetails.weight)
+            put("training", trainingDetails.trainingId)
+            put("exercise", trainingDetails.exerciseId)
+            put("executionTime", trainingDetails.executionTime)
+            put("note", trainingDetails.note)
+            put("borg", trainingDetails.borg)
+        }
+
+        val rowsAffected = db.update(
+            "trainingDetails",
+            values,
+            "id = ?",
+            arrayOf(trainingDetails.id.toString())
+        )
+
+        db.close()
+        return rowsAffected > 0
+    }
+
+
 }

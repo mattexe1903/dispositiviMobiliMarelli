@@ -52,7 +52,6 @@ class NewWorkoutActivity : AppCompatActivity() {
         db = WorkoutDatabaseHelper(this)
         authManager = AuthManager()
 
-        //NEW
         val draftId = intent.getIntExtra("TRAINING_ID", -1)
         if(draftId != -1){
             loadDraftData(draftId)
@@ -229,18 +228,32 @@ class NewWorkoutActivity : AppCompatActivity() {
         binding.edSleepValue.addTextChangedListener(textWatcher)
     }
 
-    private fun saveWorkout(){
-        binding.saveButton.setOnClickListener{
+    private fun saveWorkout(draftId: Int? = null) {
+        binding.saveButton.setOnClickListener {
             val editDate: EditText = findViewById(R.id.editDate)
             val dateText: String = editDate.text.toString()
             val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            val selectedDate: Date = formatter.parse(dateText)
-            val today = Calendar.getInstance().time
+            val selectedDate: Date
+            try {
+                selectedDate = formatter.parse(dateText)
+            } catch (e: ParseException) {
+                Toast.makeText(this, "Data non valida", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-            if(selectedDate.after(today)){
-                showDateDialog()
-            }else {
+            val today = Calendar.getInstance().time
+            val isFutureDate = selectedDate.after(today)
+            val areRPRValuesMissing = binding.edMoodValue.text.isNullOrBlank()
+                    || binding.edEnergyValue.text.isNullOrBlank()
+                    || binding.edDomsValue.text.isNullOrBlank()
+                    || binding.edSleepValue.text.isNullOrBlank()
+
+            if (draftId == null) {
                 registerWorkoutIntoDatabase()
+            } else if (isFutureDate || areRPRValuesMissing) {
+                showDateDialog()
+            } else {
+                saveWorkoutModifications(draftId)
             }
         }
     }
@@ -580,9 +593,125 @@ class NewWorkoutActivity : AppCompatActivity() {
                 seekBar.progress = exercise.borg - 6
 
                 binding.container.addView(newBox, 0)
+
+                saveWorkout(draftId)
             }
         } else {
             Toast.makeText(this, "Errore: bozza non trovata", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun saveWorkoutModifications(draftId: Int) {
+        try {
+            val editDate: EditText = findViewById(R.id.editDate)
+            val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val dateText: String = editDate.text.toString()
+            val selectedDate: Date = formatter.parse(dateText)
+            val today = Calendar.getInstance().time
+
+            val formattedDate = formatter.format(selectedDate)
+            val userId = selectedUserId
+            val containerBox = binding.container
+            val allValues = mutableListOf<TrainingDetailsModel>()
+            val ptId = authManager.getCurrentUserUid()
+
+            val mood = binding.edMoodValue.text.toString()
+            val energy = binding.edEnergyValue.text.toString()
+            val doms = binding.edDomsValue.text.toString()
+            val sleep = binding.edSleepValue.text.toString()
+            val index = binding.indexValue.text.toString()
+
+            var overallBorg = 0
+            var exerciseCount = 0
+
+            val isRprComplete = mood.isNotBlank() && energy.isNotBlank() && doms.isNotBlank() && sleep.isNotBlank() && index.isNotBlank()
+            val isDateFuture = selectedDate.after(today)
+
+            if (userId != null) {
+                val trainingId = draftId
+                val workoutNumber = db.getWorkoutNumberByClientId(userId.toString())
+                val isDraft = if (isDateFuture || !isRprComplete) 1 else 0
+
+                val trainingModel = TrainingModel(
+                    trainingId,
+                    formattedDate,
+                    formatTime(workoutDuration),
+                    userId.toString(),
+                    ptId.toString(),
+                    workoutNumber,
+                    isDraft
+                )
+                db.updateTraining(trainingModel)
+
+                for (i in 0 until containerBox.childCount) {
+                    val box = containerBox.getChildAt(i)
+
+                    val exerciseName = box.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
+                    val exerciseId = db.getExerciseIdFromName(exerciseName.text.toString())
+                    val reps = box.findViewById<NumberPicker>(R.id.repsPicker)
+                    val sets = box.findViewById<NumberPicker>(R.id.seriesPicker)
+                    val weight = box.findViewById<NumberPicker>(R.id.weightPicker)
+                    val note = box.findViewById<EditText>(R.id.editNote)
+                    val seekBar: SeekBar = box.findViewById(R.id.exerciseBorgValue)
+                    val borg: Int = seekBar.progress + 6
+                    overallBorg += borg
+                    exerciseCount++
+
+                    val switchedTimeOption = box.findViewById<Switch>(R.id.switchTimeOption)
+                    val executionTime: String = if (switchedTimeOption.isChecked) {
+                        box.findViewById<EditText>(R.id.editManualDuration).text.toString()
+                    } else {
+                        box.findViewById<TextView>(R.id.timerTextView).text.toString()
+                    }
+                    val durationInSeconds = parseDuration(executionTime)
+
+                    if (exerciseId != null && reps != null && sets != null && weight != null && executionTime != null) {
+                        allValues.add(
+                            TrainingDetailsModel(
+                                exerciseId,
+                                reps.value.toString(),
+                                sets.value.toString(),
+                                weight.value.toString(),
+                                trainingId,
+                                exerciseId,
+                                note.text.toString(),
+                                durationInSeconds.toString(),
+                                borg
+                            )
+                        )
+                    }
+                }
+
+                val averageBorg = if (exerciseCount > 0) overallBorg / exerciseCount else 0
+                val existingRPRId = (db.getRprByTrainingId(trainingId.toString()))?.id
+                val rprModel = RPRModel(
+                    existingRPRId ?: 0, // Usa l'ID esistente, se disponibile.
+                    userId.toString(),
+                    mood,
+                    sleep,
+                    energy,
+                    doms,
+                    index,
+                    averageBorg.toString(),
+                    trainingId
+                )
+                db.updateRPR(rprModel) // Aggiorniamo invece di inserire un nuovo record.
+
+                for (item in allValues) {
+                    db.updateTrainingDetails(item) // Aggiorniamo i dettagli dell'esercizio.
+                }
+
+                if (isDraft == 0) {
+                    Toast.makeText(this, "Workout completato e salvato", Toast.LENGTH_SHORT).show()
+                    finish()
+                } else {
+                    Toast.makeText(this, "Bozza aggiornata", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, "Utente non trovato", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: ParseException) {
+            Toast.makeText(this, "Data non valida", Toast.LENGTH_SHORT).show()
         }
     }
 
