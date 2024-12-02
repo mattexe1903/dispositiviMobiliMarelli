@@ -142,10 +142,9 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         db.close()
     }
 
-    fun insertTraining(training: TrainingModel){
-        val db= writableDatabase
-        val values = ContentValues().apply{
-            put("id", training.id)
+    fun insertTraining(training: TrainingModel): Int {
+        val db = writableDatabase
+        val values = ContentValues().apply {
             put("date", training.date)
             put("duration", training.duration)
             put("client", training.clientId)
@@ -153,8 +152,10 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
             put("workoutNumber", training.workoutNumber)
             put("isDraft", training.isDraft)
         }
-        db.insert("training", null, values)
+
+        val id = db.insert("training", null, values)
         db.close()
+        return id.toInt()
     }
 
     fun insertTrainingDetails(trainingDetails: TrainingDetailsModel){
@@ -311,7 +312,8 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
                 cursor.getInt(cursor.getColumnIndexOrThrow("workoutNumber")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("isDraft"))
             )
-            trainingList.add(training)
+            if(training.isDraft==0)
+                trainingList.add(training)
         }
         cursor.close()
         db.close()
@@ -337,7 +339,7 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         return client
     }
 
-    fun getRprByTrainingId(trainingId: String): RPRModel? {
+    fun getRprByTrainingId(trainingId: String): RPRModel {
         val db = readableDatabase
         val query = "SELECT * FROM rpr WHERE training=?"
         var rprModel: RPRModel? = null
@@ -357,23 +359,25 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         }
         cursor.close()
         db.close()
-        return rprModel
+        return rprModel!!
     }
 
-    fun getWorkoutNumberByClientId(userId: String): Int{
-        val workoutNumber: Int
+    fun getWorkoutNumberByClientId(userId: String): Int {
+        val workoutCount: Int
         val db = readableDatabase
-        val query = "SELECT MAX(workoutNumber) FROM training WHERE client=?"
+        val query = "SELECT COUNT(*) FROM training WHERE client=? AND isDraft=0"
         val cursor = db.rawQuery(query, arrayOf(userId))
-        workoutNumber = if (cursor.moveToFirst()){
-            cursor.getInt(0)+1
+
+        workoutCount = if (cursor.moveToFirst()) {
+            cursor.getInt(0)
         } else {
-            1
+            0
         }
         cursor.close()
         db.close()
-        return workoutNumber
+        return workoutCount+1
     }
+
 
     fun getActiveTimeByTrainingId(trainingId: Int): Int {
         var activeTime = 0
@@ -455,4 +459,79 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         db.close()
         return trainingList
     }
+
+    fun updateRPR(rpr: RPRModel): Boolean {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("id", rpr.id)
+            put("client", rpr.clientID)
+            put("mood", rpr.mood)
+            put("sleep", rpr.sleep)
+            put("energy", rpr.energy)
+            put("doms", rpr.doms)
+            put("avg", rpr.index)
+            put("borg", rpr.borg)
+            put("training", rpr.training)
+        }
+
+        val rowsAffected = db.update(
+            "rpr",
+            values,
+            "id = ?",
+            arrayOf(rpr.id.toString())
+        )
+
+        db.close()
+        return rowsAffected > 0
+    }
+
+    fun updateTraining(training: TrainingModel): Boolean {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("id", training.id)
+            put("date", training.date)
+            put("duration", training.duration)
+            put("client", training.clientId)
+            put("operator", training.personalTrainerId)
+            put("workoutNumber", training.workoutNumber)
+            put("isDraft", training.isDraft)
+        }
+
+        val rowsAffected = db.update(
+            "training",
+            values,
+            "id = ?",
+            arrayOf(training.id.toString())
+        )
+
+        db.close()
+        return rowsAffected > 0
+    }
+
+    fun updateTrainingDetails(trainingDetails: TrainingDetailsModel): Boolean {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("id", trainingDetails.id)
+            put("reps", trainingDetails.reps)
+            put("sets", trainingDetails.sets)
+            put("weight", trainingDetails.weight)
+            put("training", trainingDetails.trainingId)
+            put("exercise", trainingDetails.exerciseId)
+            put("executionTime", trainingDetails.executionTime)
+            put("note", trainingDetails.note)
+            put("borg", trainingDetails.borg)
+        }
+
+        val rowsAffected = db.update(
+            "trainingDetails",
+            values,
+            "id = ?",
+            arrayOf(trainingDetails.id.toString())
+        )
+
+        db.close()
+        return rowsAffected > 0
+    }
+
+
 }
