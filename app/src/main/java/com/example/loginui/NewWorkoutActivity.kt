@@ -279,11 +279,9 @@ class NewWorkoutActivity : AppCompatActivity() {
             var exerciseCount = 0
 
             if (userId != null) {
-                //TODO adjust with autoincremental id
-                val trainingId = db.countTrainingRows() + 1
                 val workoutNumber = db.getWorkoutNumberByClientId(userId.toString())
                 val trainingModel = TrainingModel(
-                    trainingId,
+                    0,
                     formattedDate,
                     formatTime(workoutDuration),
                     userId.toString(),
@@ -291,7 +289,7 @@ class NewWorkoutActivity : AppCompatActivity() {
                     workoutNumber,
                     0
                 )
-                db.insertTraining(trainingModel)
+                val trainingId = db.insertTraining(trainingModel)
 
                 val mood = binding.edMoodValue.text.toString()
                 val energy = binding.edEnergyValue.text.toString()

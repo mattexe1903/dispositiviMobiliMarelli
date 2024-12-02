@@ -375,7 +375,6 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         }
         cursor.close()
         db.close()
-
         return workoutCount+1
     }
 
