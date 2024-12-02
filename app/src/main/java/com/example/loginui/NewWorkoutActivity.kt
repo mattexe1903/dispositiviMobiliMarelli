@@ -561,9 +561,14 @@ class NewWorkoutActivity : AppCompatActivity() {
             exercises.forEach { exercise ->
                 val newBox = LayoutInflater.from(this).inflate(R.layout.exercise_box, binding.container, false)
                 val editExercise = newBox.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
+
+                val numberPickerManager = NumberPickerManager()
                 val reps = newBox.findViewById<NumberPicker>(R.id.repsPicker)
+                numberPickerManager.configureRepsPicker(reps)
                 val sets = newBox.findViewById<NumberPicker>(R.id.seriesPicker)
+                numberPickerManager.configureSetsPicker(sets)
                 val weight = newBox.findViewById<NumberPicker>(R.id.weightPicker)
+                numberPickerManager.configureWeightPicker(weight)
                 val note = newBox.findViewById<EditText>(R.id.editNote)
                 val seekBar = newBox.findViewById<SeekBar>(R.id.exerciseBorgValue)
 
