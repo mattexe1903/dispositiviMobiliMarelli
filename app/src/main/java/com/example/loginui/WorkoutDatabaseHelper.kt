@@ -338,7 +338,7 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         return client
     }
 
-    fun getRprByTrainingId(trainingId: String): RPRModel? {
+    fun getRprByTrainingId(trainingId: String): RPRModel {
         val db = readableDatabase
         val query = "SELECT * FROM rpr WHERE training=?"
         var rprModel: RPRModel? = null
@@ -358,7 +358,7 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         }
         cursor.close()
         db.close()
-        return rprModel
+        return rprModel!!
     }
 
     fun getWorkoutNumberByClientId(userId: String): Int{
@@ -466,8 +466,8 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
             put("sleep", rpr.sleep)
             put("energy", rpr.energy)
             put("doms", rpr.doms)
-            put("index", rpr.index)
-            put("avg", rpr.borg)
+            put("avg", rpr.index)
+            put("borg", rpr.borg)
             put("training", rpr.training)
         }
 

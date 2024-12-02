@@ -258,7 +258,7 @@ class NewWorkoutActivity : AppCompatActivity() {
 
     private fun updateDraft(draftId: Int){
         binding.saveButton.setOnClickListener {
-            saveWorkoutModifications(draftId)
+                saveWorkoutModifications(draftId)
         }
     }
 
@@ -597,7 +597,6 @@ class NewWorkoutActivity : AppCompatActivity() {
                 binding.container.addView(newBox, 0)
 
             }
-            //saveWorkout(draftId)
         } else {
             Toast.makeText(this, "Errore: bozza non trovata", Toast.LENGTH_SHORT).show()
         }
@@ -685,9 +684,9 @@ class NewWorkoutActivity : AppCompatActivity() {
                 }
 
                 val averageBorg = if (exerciseCount > 0) overallBorg / exerciseCount else 0
-                val existingRPRId = (db.getRprByTrainingId(trainingId.toString()))?.id
+                val existingRPRId = (db.getRprByTrainingId(trainingId.toString())).id
                 val rprModel = RPRModel(
-                    existingRPRId ?: 0, // Usa l'ID esistente, se disponibile.
+                    existingRPRId,
                     userId.toString(),
                     mood,
                     sleep,
@@ -697,10 +696,10 @@ class NewWorkoutActivity : AppCompatActivity() {
                     averageBorg.toString(),
                     trainingId
                 )
-                //pdb.updateRPR(rprModel)
+                db.updateRPR(rprModel)
 
                 for (item in allValues) {
-                    db.updateTrainingDetails(item) // Aggiorniamo i dettagli dell'esercizio.
+                    db.updateTrainingDetails(item)
                 }
 
                 if (isDraft == 0) {
