@@ -312,7 +312,8 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
                 cursor.getInt(cursor.getColumnIndexOrThrow("workoutNumber")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("isDraft"))
             )
-            trainingList.add(training)
+            if(training.isDraft==0)
+                trainingList.add(training)
         }
         cursor.close()
         db.close()
@@ -361,20 +362,23 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         return rprModel!!
     }
 
-    fun getWorkoutNumberByClientId(userId: String): Int{
-        val workoutNumber: Int
+    fun getWorkoutNumberByClientId(userId: String): Int {
+        val workoutCount: Int
         val db = readableDatabase
-        val query = "SELECT MAX(workoutNumber) FROM training WHERE client=?"
+        val query = "SELECT COUNT(*) FROM training WHERE client=? AND isDraft=0"
         val cursor = db.rawQuery(query, arrayOf(userId))
-        workoutNumber = if (cursor.moveToFirst()){
-            cursor.getInt(0)+1
+
+        workoutCount = if (cursor.moveToFirst()) {
+            cursor.getInt(0)
         } else {
-            1
+            0
         }
         cursor.close()
         db.close()
-        return workoutNumber
+
+        return workoutCount+1
     }
+
 
     fun getActiveTimeByTrainingId(trainingId: Int): Int {
         var activeTime = 0
