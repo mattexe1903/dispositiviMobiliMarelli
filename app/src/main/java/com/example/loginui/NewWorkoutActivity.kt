@@ -565,10 +565,11 @@ class NewWorkoutActivity : AppCompatActivity() {
             selectedUserId = draft.clientId.toInt()
             workoutDuration = parseDuration(draft.duration)
 
-            binding.edDomsValue.setText(rpr?.doms)
-            binding.edSleepValue.setText(rpr?.sleep)
-            binding.edEnergyValue.setText(rpr?.energy)
-            binding.edMoodValue.setText(rpr?.mood)
+            binding.edDomsValue.setText(rpr.doms)
+            binding.edSleepValue.setText(rpr.sleep)
+            binding.edEnergyValue.setText(rpr.energy)
+            binding.edMoodValue.setText(rpr.mood)
+            binding.indexValue.text = rpr.index
 
             val exercises = db.getTrainingDetailsByTrainingId(draftId.toString())
             exercises.forEach { exercise ->
