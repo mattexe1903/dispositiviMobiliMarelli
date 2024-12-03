@@ -165,4 +165,13 @@
         app:layout_constraintStart_toStartOf="@+id/borg"
         app:layout_constraintTop_toBottomOf="@+id/borg" />
 
+    <ImageView
+        android:id="@+id/infoWorkoutPerformed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/trainingLoad"
+        app:layout_constraintEnd_toEndOf="@+id/toggleButton"
+        app:srcCompat="@drawable/info" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

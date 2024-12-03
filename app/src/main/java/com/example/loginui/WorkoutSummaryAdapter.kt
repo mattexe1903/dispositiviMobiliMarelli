@@ -1,9 +1,11 @@
 package com.example.loginui
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.cardview.widget.CardView
@@ -30,6 +32,7 @@ class WorkoutSummaryAdapter(private var trainings: List<TrainingModel>,context: 
         val mood: TextView = itemView.findViewById(R.id.mood)
         val borg: TextView = itemView.findViewById(R.id.borg)
         val trainingLoad: TextView = itemView.findViewById(R.id.trainingLoad)
+        val info: ImageView = itemView.findViewById(R.id.infoWorkoutPerformed)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrainingViewHolder {
@@ -42,10 +45,11 @@ class WorkoutSummaryAdapter(private var trainings: List<TrainingModel>,context: 
         val db = WorkoutDatabaseHelper(holder.itemView.context)
         val client = db.getClientById(training.clientId)
         val rpr = db.getRprByTrainingId(training.id.toString())
-        val borg = rpr?.borg?.toIntOrNull() ?: 0
+        val borg = rpr.borg.toIntOrNull() ?: 0
         val activeTime = db.getActiveTimeByTrainingId(training.id) ?: 0
         val activeTimeInMinutes = activeTime / 60
         val trainingLoad = borg * activeTimeInMinutes
+        val trainingId = training.id
 
         holder.clientName.text = client
         training.workoutNumber.let { holder.workoutNumber.text = "$it ° w" }
@@ -62,11 +66,11 @@ class WorkoutSummaryAdapter(private var trainings: List<TrainingModel>,context: 
             holder.daySinceLastWorkout.text = ""
         }
 
-        rpr?.index.let { holder.index.text = "index: $it"}
-        rpr?.mood?.let { holder.mood.text = "mood: $it" }
-        rpr?.sleep?.let { holder.sleep.text = "sleep: $it" }
-        rpr?.energy?.let { holder.energy.text = "energy: $it" }
-        rpr?.doms?.let { holder.doms.text = "doms: $it" }
+        rpr.index.let { holder.index.text = "index: $it"}
+        rpr.mood.let { holder.mood.text = "mood: $it" }
+        rpr.sleep.let { holder.sleep.text = "sleep: $it" }
+        rpr.energy.let { holder.energy.text = "energy: $it" }
+        rpr.doms.let { holder.doms.text = "doms: $it" }
         borg.let{holder.borg.text = "borg: $it"}
         trainingLoad.let {holder.trainingLoad.text = "training load: $it"}
 
@@ -76,6 +80,13 @@ class WorkoutSummaryAdapter(private var trainings: List<TrainingModel>,context: 
             } else {
                 holder.cardView.visibility = View.GONE
             }
+        }
+
+        holder.info.setOnClickListener{
+            val context = holder.itemView.context
+            val intent = Intent(context, WorkoutPerformedActivity::class.java)
+            intent.putExtra("TRAINING_ID", trainingId)
+            context.startActivity(intent)
         }
     }
 
