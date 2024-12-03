@@ -595,6 +595,55 @@ class NewWorkoutActivity : AppCompatActivity() {
                 note.setText(exercise.note)
                 seekBar.progress = exercise.borg - 6
 
+                newBox.tag = exercise.id
+
+                val switchTimeOption = newBox.findViewById<Switch>(R.id.switchTimeOption)
+                val timerOption = newBox.findViewById<ConstraintLayout>(R.id.timerOption)
+                val manualOption = newBox.findViewById<ConstraintLayout>(R.id.manualOption)
+
+                switchTimeOption.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        timerOption.visibility = View.GONE
+                        manualOption.visibility = View.VISIBLE
+                    } else {
+                        timerOption.visibility = View.VISIBLE
+                        manualOption.visibility = View.GONE
+                    }
+                }
+
+                val timerTextView = newBox.findViewById<TextView>(R.id.timerTextView)
+                val startButton = newBox.findViewById<Button>(R.id.start)
+                val stopButton = newBox.findViewById<Button>(R.id.stop)
+                val resetButton = newBox.findViewById<Button>(R.id.reset)
+
+                stopButton.visibility = View.GONE
+                resetButton.visibility = View.GONE
+
+                val boxTimer = Timer(handler) { elapsedTime ->
+                    timerTextView.text = formatDuration(elapsedTime)
+                }
+
+                startButton.setOnClickListener {
+                    boxTimer.start()
+                    stopButton.visibility = View.VISIBLE
+                    resetButton.visibility = View.GONE
+                    startButton.visibility = View.GONE
+                }
+
+                stopButton.setOnClickListener {
+                    boxTimer.stop()
+                    startButton.visibility = View.VISIBLE
+                    stopButton.visibility = View.GONE
+                    resetButton.visibility = View.VISIBLE
+                }
+
+                resetButton.setOnClickListener {
+                    boxTimer.reset()
+                    stopButton.visibility = View.GONE
+                    resetButton.visibility = View.GONE
+                    startButton.visibility = View.VISIBLE
+                }
+
                 binding.container.addView(newBox, 0)
             }
         } else {
@@ -649,7 +698,7 @@ class NewWorkoutActivity : AppCompatActivity() {
 
                     val exerciseName = box.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
                     val exerciseId = db.getExerciseIdFromName(exerciseName.text.toString())
-                    val trainingDetailsId = db.getTrainingDetailsIdByTrainingIdAndExerciseId(trainingId.toString(), exerciseId)
+                    val trainingDetailId = box.tag as Int
                     val reps = box.findViewById<NumberPicker>(R.id.repsPicker)
                     val sets = box.findViewById<NumberPicker>(R.id.seriesPicker)
                     val weight = box.findViewById<NumberPicker>(R.id.weightPicker)
@@ -670,7 +719,7 @@ class NewWorkoutActivity : AppCompatActivity() {
                     if (exerciseId != null && reps != null && sets != null && weight != null && executionTime != null) {
                         allValues.add(
                             TrainingDetailsModel(
-                                trainingDetailsId,
+                                trainingDetailId,
                                 reps.value.toString(),
                                 sets.value.toString(),
                                 weight.value.toString(),

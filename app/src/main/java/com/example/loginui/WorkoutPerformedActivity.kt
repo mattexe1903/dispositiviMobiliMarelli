@@ -34,7 +34,7 @@ class WorkoutPerformedActivity: AppCompatActivity(){
         if (training != null) {
             binding.userName.text = clientNameSurname
             binding.editDateWP.setText(training.date)
-            binding.textViewCountdownWP.text = parseDuration(training.duration).toString()
+            binding.textViewCountdownWP.text = training.duration
 
             binding.edDomsValueWP.setText(rpr.doms)
             binding.edSleepValueWP.setText(rpr.sleep)
@@ -79,10 +79,4 @@ class WorkoutPerformedActivity: AppCompatActivity(){
         }
     }
 
-    private fun parseDuration(duration: String): Long {
-        val parts = duration.split(":")
-        val minutes = parts[0].toLong()
-        val seconds = parts[1].toLong()
-        return (minutes * 60 + seconds)
-    }
 }

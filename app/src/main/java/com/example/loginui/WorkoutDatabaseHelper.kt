@@ -448,8 +448,8 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
                 cursor.getString(cursor.getColumnIndexOrThrow("weight")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("training")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("exercise")),
-                cursor.getString(cursor.getColumnIndexOrThrow("executionTime")),
                 cursor.getString(cursor.getColumnIndexOrThrow("note")),
+                cursor.getString(cursor.getColumnIndexOrThrow("executionTime")),
                 cursor.getInt(cursor.getColumnIndexOrThrow("borg"))
             )
             trainingList.add(trainingDetails)
