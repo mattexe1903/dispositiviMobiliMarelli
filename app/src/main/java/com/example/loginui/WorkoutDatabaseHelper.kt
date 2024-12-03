@@ -460,6 +460,19 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         return trainingList
     }
 
+    fun getTrainingDetailsIdByTrainingIdAndExerciseId(trainingId: String, exerciseId: Int?): Int{
+        var trainingDetailsId : Int = 0
+        val db = readableDatabase
+        val query = "SELECT id FROM trainingDetails WHERE training = ? and exercise=?"
+        val cursor = db.rawQuery(query, arrayOf(trainingId, exerciseId.toString()))
+        if (cursor.moveToFirst()) {
+            trainingDetailsId = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
+        }
+        cursor.close()
+        db.close()
+        return trainingDetailsId
+    }
+
     fun updateRPR(rpr: RPRModel): Boolean {
         val db = writableDatabase
         val values = ContentValues().apply {

@@ -486,8 +486,7 @@ class NewWorkoutActivity : AppCompatActivity() {
                 for (i in 0 until containerBox.childCount) {
                     val box = containerBox.getChildAt(i)
 
-                    val exerciseName =
-                        box.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
+                    val exerciseName = box.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
                     val exerciseId = db.getExerciseIdFromName(exerciseName.text.toString())
                     val reps = box.findViewById<NumberPicker>(R.id.repsPicker)
                     val sets = box.findViewById<NumberPicker>(R.id.seriesPicker)
@@ -597,7 +596,6 @@ class NewWorkoutActivity : AppCompatActivity() {
                 seekBar.progress = exercise.borg - 6
 
                 binding.container.addView(newBox, 0)
-
             }
         } else {
             Toast.makeText(this, "Error: draft not found.", Toast.LENGTH_SHORT).show()
@@ -651,6 +649,7 @@ class NewWorkoutActivity : AppCompatActivity() {
 
                     val exerciseName = box.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
                     val exerciseId = db.getExerciseIdFromName(exerciseName.text.toString())
+                    val trainingDetailsId = db.getTrainingDetailsIdByTrainingIdAndExerciseId(trainingId.toString(), exerciseId)
                     val reps = box.findViewById<NumberPicker>(R.id.repsPicker)
                     val sets = box.findViewById<NumberPicker>(R.id.seriesPicker)
                     val weight = box.findViewById<NumberPicker>(R.id.weightPicker)
@@ -671,7 +670,7 @@ class NewWorkoutActivity : AppCompatActivity() {
                     if (exerciseId != null && reps != null && sets != null && weight != null && executionTime != null) {
                         allValues.add(
                             TrainingDetailsModel(
-                                exerciseId,
+                                trainingDetailsId,
                                 reps.value.toString(),
                                 sets.value.toString(),
                                 weight.value.toString(),

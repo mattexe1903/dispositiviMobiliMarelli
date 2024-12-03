@@ -10,6 +10,7 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.loginui.databinding.WorkoutPerformedActivityBinding
+import com.example.loginui.manager.NumberPickerManager
 
 class WorkoutPerformedActivity: AppCompatActivity(){
     private lateinit var binding: WorkoutPerformedActivityBinding
@@ -46,22 +47,30 @@ class WorkoutPerformedActivity: AppCompatActivity(){
                 val newBox = LayoutInflater.from(this).inflate(R.layout.exercise_box, binding.containerWP, false)
                 val editExercise = newBox.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
 
-                val exerciseList = db.getExercisesName("")
-                val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, exerciseList)
-                editExercise.setAdapter(adapter)
-
+                val numberPickerManager = NumberPickerManager()
                 val reps = newBox.findViewById<NumberPicker>(R.id.repsPicker)
+                numberPickerManager.configureRepsPicker(reps)
                 val sets = newBox.findViewById<NumberPicker>(R.id.seriesPicker)
+                numberPickerManager.configureSetsPicker(sets)
                 val weight = newBox.findViewById<NumberPicker>(R.id.weightPicker)
+                numberPickerManager.configureWeightPicker(weight)
                 val note = newBox.findViewById<EditText>(R.id.editNote)
                 val seekBar = newBox.findViewById<SeekBar>(R.id.exerciseBorgValue)
 
+                val repsValue = exercise.reps.toIntOrNull() ?: 0
+                val setsValue = exercise.sets.toIntOrNull() ?: 0
+                val weightValue = exercise.weight.toIntOrNull() ?: 0
+
                 editExercise.setText(exercise.exerciseId?.let { db.getExerciseNameFromId(it) })
-                reps.value = exercise.reps.toInt()
-                sets.value = exercise.sets.toInt()
-                weight.value = exercise.weight.toInt()
+                reps.value = repsValue
+                sets.value = setsValue
+                weight.value = weightValue
                 note.setText(exercise.note)
                 seekBar.progress = exercise.borg - 6
+
+                reps.isEnabled = false
+                sets.isEnabled = false
+                weight.isEnabled = false
 
                 binding.containerWP.addView(newBox, 0)
             }
