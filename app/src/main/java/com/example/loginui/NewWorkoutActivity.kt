@@ -196,7 +196,6 @@ class NewWorkoutActivity : AppCompatActivity() {
             val weight = newBox.findViewById<NumberPicker>(R.id.weightPicker)
             numberPickerManager.configureWeightPicker(weight)
 
-
             binding.container.addView(newBox, 0)
         }
     }
@@ -258,7 +257,7 @@ class NewWorkoutActivity : AppCompatActivity() {
 
     private fun updateDraft(draftId: Int){
         binding.saveButton.setOnClickListener {
-                saveWorkoutModifications(draftId)
+            saveWorkoutModifications(draftId)
         }
     }
 
