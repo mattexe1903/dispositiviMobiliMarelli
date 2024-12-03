@@ -237,7 +237,7 @@ class NewWorkoutActivity : AppCompatActivity() {
             try {
                 selectedDate = formatter.parse(dateText)
             } catch (e: ParseException) {
-                Toast.makeText(this, "Data non valida", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Invalid date", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -433,14 +433,14 @@ class NewWorkoutActivity : AppCompatActivity() {
 
     private fun showDateDialog() {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Data futura")
-        builder.setMessage("Hai selezionato una data futura. Vuoi completare l'allenamento ora o salvarlo nelle bozze per eseguirlo in un secondo momento?")
+        builder.setTitle("Future date!")
+        builder.setMessage("You selected a future date. Do you want to complete the workout now or save it in the drafts to do it later?")
 
-        builder.setPositiveButton("Completa ora") { dialog, _ ->
+        builder.setPositiveButton("Complete now") { dialog, _ ->
             dialog.dismiss()
         }
 
-        builder.setNegativeButton("Salva nelle bozze") { dialog, _ ->
+        builder.setNegativeButton("Save as draft") { dialog, _ ->
             saveWorkoutAsDraft()
             dialog.dismiss()
         }
@@ -545,12 +545,12 @@ class NewWorkoutActivity : AppCompatActivity() {
                     db.insertTrainingDetails(item)
                 }
                 finish()
-                Toast.makeText(this, "draft saved", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Draft saved", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "user not found", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show()
             }
         } catch (e: ParseException) {
-            Toast.makeText(this, "date not valid", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Invalid date", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -597,7 +597,7 @@ class NewWorkoutActivity : AppCompatActivity() {
 
             }
         } else {
-            Toast.makeText(this, "Errore: bozza non trovata", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Error: draft not found.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -702,16 +702,16 @@ class NewWorkoutActivity : AppCompatActivity() {
                 }
 
                 if (isDraft == 0) {
-                    Toast.makeText(this, "Workout completato e salvato", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Workout completed and saved.", Toast.LENGTH_SHORT).show()
                     finish()
                 } else {
-                    Toast.makeText(this, "Bozza aggiornata", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Updated draft.", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(this, "Utente non trovato", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "User not found.", Toast.LENGTH_SHORT).show()
             }
         } catch (e: ParseException) {
-            Toast.makeText(this, "Data non valida", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Invalid date.", Toast.LENGTH_SHORT).show()
         }
         finish()
     }
