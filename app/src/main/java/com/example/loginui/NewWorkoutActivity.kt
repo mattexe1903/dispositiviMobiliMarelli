@@ -575,6 +575,10 @@ class NewWorkoutActivity : AppCompatActivity() {
                 val newBox = LayoutInflater.from(this).inflate(R.layout.exercise_box, binding.container, false)
                 val editExercise = newBox.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
 
+                val exerciseList = db.getExercisesName("")
+                val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, exerciseList)
+                editExercise.setAdapter(adapter)
+
                 val numberPickerManager = NumberPickerManager()
                 val reps = newBox.findViewById<NumberPicker>(R.id.repsPicker)
                 numberPickerManager.configureRepsPicker(reps)
