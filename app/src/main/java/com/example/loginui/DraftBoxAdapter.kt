@@ -30,7 +30,7 @@ class DraftBoxAdapter (private var trainings: List<TrainingModel>, context: Cont
         val db = WorkoutDatabaseHelper(holder.itemView.context)
         val client = db.getClientById(training.clientId)
         val trainingId = training.id
-        //TO DO pt name
+        //TODO pt name
 
         holder.clientName.text = client
         holder.draftId.text = trainingId.toString()
