@@ -227,7 +227,7 @@ class NewWorkoutActivity : AppCompatActivity() {
         binding.edSleepValue.addTextChangedListener(textWatcher)
     }
 
-    private fun saveWorkout(draftId: Int? = null) {
+    private fun saveWorkout() {
         binding.saveButton.setOnClickListener {
             val editDate: EditText = findViewById(R.id.editDate)
             val dateText: String = editDate.text.toString()
@@ -243,14 +243,10 @@ class NewWorkoutActivity : AppCompatActivity() {
             val today = Calendar.getInstance().time
             val isFutureDate = selectedDate.after(today)
 
-            if (draftId != null) {
-                saveWorkoutModifications(draftId)
+            if (isFutureDate) {
+                showDateDialog()
             } else {
-                if (isFutureDate) {
-                    showDateDialog()
-                } else {
-                    registerWorkoutIntoDatabase()
-                }
+                registerWorkoutIntoDatabase()
             }
         }
     }
@@ -541,6 +537,7 @@ class NewWorkoutActivity : AppCompatActivity() {
 
                 for (item in allValues) {
                     db.insertTrainingDetails(item)
+
                 }
                 finish()
                 Toast.makeText(this, "Draft saved", Toast.LENGTH_SHORT).show()
@@ -592,7 +589,7 @@ class NewWorkoutActivity : AppCompatActivity() {
                 reps.value = exercise.reps.toInt()
                 sets.value = exercise.sets.toInt()
                 weight.value = exercise.weight.toInt()
-                note.setText(exercise.note)
+                //note.setText(exercise.note)
                 seekBar.progress = exercise.borg - 6
 
                 newBox.tag = exercise.id
