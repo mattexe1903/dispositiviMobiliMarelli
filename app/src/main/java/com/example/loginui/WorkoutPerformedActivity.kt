@@ -7,6 +7,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.NumberPicker
 import android.widget.SeekBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.loginui.databinding.WorkoutPerformedActivityBinding
@@ -56,6 +57,7 @@ class WorkoutPerformedActivity: AppCompatActivity(){
                 numberPickerManager.configureWeightPicker(weight)
                 val note = newBox.findViewById<EditText>(R.id.editNote)
                 val seekBar = newBox.findViewById<SeekBar>(R.id.exerciseBorgValue)
+                val timerText = newBox.findViewById<TextView>(R.id.timerTextView)
 
                 val repsValue = exercise.reps.toIntOrNull() ?: 0
                 val setsValue = exercise.sets.toIntOrNull() ?: 0
@@ -67,6 +69,7 @@ class WorkoutPerformedActivity: AppCompatActivity(){
                 weight.value = weightValue
                 note.setText(exercise.note)
                 seekBar.progress = exercise.borg - 6
+                timerText.text = formatTime(exercise.executionTime.toLong()*1000)
 
                 reps.isEnabled = false
                 sets.isEnabled = false
@@ -79,4 +82,9 @@ class WorkoutPerformedActivity: AppCompatActivity(){
         }
     }
 
+    private fun formatTime(millis: Long): String {
+        val minutes = (millis / 1000) / 60
+        val seconds = (millis / 1000) % 60
+        return String.format("%02d:%02d", minutes, seconds)
+    }
 }

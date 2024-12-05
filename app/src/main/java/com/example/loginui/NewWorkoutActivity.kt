@@ -594,7 +594,7 @@ class NewWorkoutActivity : AppCompatActivity() {
                 reps.value = exercise.reps.toInt()
                 sets.value = exercise.sets.toInt()
                 weight.value = exercise.weight.toInt()
-                //note.setText(exercise.note)
+                note.setText(exercise.note)
                 seekBar.progress = exercise.borg - 6
 
                 newBox.tag = exercise.id
