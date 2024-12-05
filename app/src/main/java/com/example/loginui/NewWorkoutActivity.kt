@@ -700,7 +700,11 @@ class NewWorkoutActivity : AppCompatActivity() {
 
                     val exerciseName = box.findViewById<AutoCompleteTextView>(R.id.editExerciseName)
                     val exerciseId = db.getExerciseIdFromName(exerciseName.text.toString())
-                    val trainingDetailId = box.tag as Int
+                    var trainingDetailId: Int = if (box.tag != null && box.tag != 0) {
+                        box.tag as Int //existing exercise
+                    } else {
+                        -1 //New exercise
+                    }
                     val reps = box.findViewById<NumberPicker>(R.id.repsPicker)
                     val sets = box.findViewById<NumberPicker>(R.id.seriesPicker)
                     val weight = box.findViewById<NumberPicker>(R.id.weightPicker)
@@ -719,19 +723,23 @@ class NewWorkoutActivity : AppCompatActivity() {
                     val durationInSeconds = parseDuration(executionTime)
 
                     if (exerciseId != null && reps != null && sets != null && weight != null && executionTime != null) {
-                        allValues.add(
-                            TrainingDetailsModel(
-                                trainingDetailId,
-                                reps.value.toString(),
-                                sets.value.toString(),
-                                weight.value.toString(),
-                                trainingId,
-                                exerciseId,
-                                note.text.toString(),
-                                durationInSeconds.toString(),
-                                borg
-                            )
+                        val trainingDetails = TrainingDetailsModel(
+                            trainingDetailId,
+                            reps.value.toString(),
+                            sets.value.toString(),
+                            weight.value.toString(),
+                            trainingId,
+                            exerciseId,
+                            note.text.toString(),
+                            durationInSeconds.toString(),
+                            borg
                         )
+
+                        if (trainingDetailId != -1) {
+                            db.updateTrainingDetails(trainingDetails)
+                        } else {
+                            db.insertTrainingDetails(trainingDetails)
+                        }
                     }
                 }
 
@@ -749,10 +757,6 @@ class NewWorkoutActivity : AppCompatActivity() {
                     trainingId
                 )
                 db.updateRPR(rprModel)
-
-                for (item in allValues) {
-                    db.updateTrainingDetails(item)
-                }
 
                 if (isDraft == 0) {
                     Toast.makeText(this, "Workout completed and saved.", Toast.LENGTH_SHORT).show()
