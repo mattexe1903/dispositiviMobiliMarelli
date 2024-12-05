@@ -243,10 +243,15 @@ class NewWorkoutActivity : AppCompatActivity() {
             val today = Calendar.getInstance().time
             val isFutureDate = selectedDate.after(today)
 
-            if (isFutureDate) {
-                showDateDialog()
-            } else {
-                registerWorkoutIntoDatabase()
+            val clientName : AutoCompleteTextView = findViewById(R.id.searchUserNameNewWorkout)
+            if(clientName.text.toString() != ""){
+                if (isFutureDate) {
+                    showDateDialog()
+                } else {
+                    registerWorkoutIntoDatabase()
+                }
+            }else{
+              Toast.makeText(this, "User not selected!", Toast.LENGTH_SHORT).show()
             }
         }
     }
