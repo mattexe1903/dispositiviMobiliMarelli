@@ -118,12 +118,11 @@ class HomeActivity : AppCompatActivity() {
             inflater.inflate(R.menu.setting_menu, popupMenu.menu)
 
             val userUid = FirebaseAuth.getInstance().currentUser?.uid
-            val managerUid = "2YwrjVbG0hZOH0TTY6AiUH5bAZG2"
 
             val manageExerciseItem = popupMenu.menu.findItem(R.id.manage_exercise)
             val managePersonalTrainerItem = popupMenu.menu.findItem(R.id.manage_pt)
 
-            if (userUid == managerUid) {
+            if (db.getPersonalTrainerRole(userUid.toString())==1) {
                 manageExerciseItem.isVisible = true
                 managePersonalTrainerItem.isVisible = true
             } else {

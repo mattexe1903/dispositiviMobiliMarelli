@@ -546,5 +546,17 @@ class WorkoutDatabaseHelper (context: Context) : SQLiteOpenHelper(context, DATAB
         return rowsAffected > 0
     }
 
+    fun getPersonalTrainerRole(ptId: String): Int{
+        var role : Int = 0
+        val db = readableDatabase
+        val query = "SELECT role FROM operator WHERE uid = ?"
+        val cursor = db.rawQuery(query, arrayOf(ptId))
+        if (cursor.moveToFirst()) {
+            role = cursor.getInt(cursor.getColumnIndexOrThrow("role"))
+        }
+        cursor.close()
+        db.close()
+        return role
+    }
 
 }
