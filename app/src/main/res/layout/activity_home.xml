@@ -50,22 +50,10 @@
         android:clickable="true"
         android:contentDescription="imgNewworkout"
         android:layout_marginStart="30dp"
-        app:layout_constraintHorizontal_bias="0.097"
+        app:layout_constraintHorizontal_bias="0.35"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/toolbar"
         app:srcCompat="@drawable/sports" />
-
-    <ImageView
-        android:id="@+id/imgGraph"
-        android:layout_width="72dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="16dp"
-        android:clickable="true"
-        android:contentDescription="imgGraph"
-        app:layout_constraintStart_toEndOf="@+id/imgNewWrk"
-        app:layout_constraintTop_toTopOf="@+id/toolbar"
-        app:srcCompat="@drawable/graphics" />
 
     <ImageView
         android:id="@+id/imgDraftWorkout"
@@ -75,7 +63,7 @@
         android:layout_marginTop="16dp"
         android:clickable="true"
         android:contentDescription="imgGraph"
-        app:layout_constraintStart_toEndOf="@+id/imgGraph"
+        app:layout_constraintStart_toEndOf="@+id/imgNewWork"
         app:layout_constraintTop_toTopOf="@+id/toolbar"
         app:srcCompat="@drawable/draft_workout" />
 
