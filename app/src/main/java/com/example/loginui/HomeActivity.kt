@@ -17,7 +17,7 @@ import com.example.loginui.databinding.RegistrationNewClientBinding
 import com.example.loginui.manager.AuthManager
 import com.google.firebase.auth.FirebaseAuth
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(){
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var db: WorkoutDatabaseHelper

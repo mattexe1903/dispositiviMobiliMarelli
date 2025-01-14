@@ -42,15 +42,16 @@
         app:layout_constraintTop_toTopOf="@+id/hi_text"
         app:srcCompat="@drawable/settings" />
 
+
     <ImageView
         android:id="@+id/imgNewWrk"
         android:layout_width="72dp"
         android:layout_height="55dp"
-        android:layout_marginTop="16dp"
         android:clickable="true"
         android:contentDescription="imgNewworkout"
-        android:layout_marginStart="30dp"
-        app:layout_constraintHorizontal_bias="0.35"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toStartOf="@id/imgDraftWorkout"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/toolbar"
         app:srcCompat="@drawable/sports" />
@@ -59,14 +60,14 @@
         android:id="@+id/imgDraftWorkout"
         android:layout_width="72dp"
         android:layout_height="55dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="16dp"
         android:clickable="true"
-        android:contentDescription="imgGraph"
-        app:layout_constraintStart_toEndOf="@+id/imgNewWork"
+        android:layout_marginTop="15dp"
+        android:contentDescription="imgDraftWorkout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@id/imgNewWrk"
         app:layout_constraintTop_toTopOf="@+id/toolbar"
         app:srcCompat="@drawable/draft_workout" />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/trainingsRecyclerView"
