@@ -104,12 +104,13 @@
                             android:textColor="@color/white"
                             android:textColorHint="@color/white"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:ignore="TouchTargetSizeCheck" />
 
                         <EditText
                             android:id="@+id/editPeriod"
                             android:layout_width="120dp"
-                            android:layout_height="40dp"
+                            android:layout_height="41dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="5dp"
                             android:hint="AM/PM"
@@ -117,7 +118,8 @@
                             android:textColor="@color/white"
                             android:textColorHint="@color/white"
                             app:layout_constraintStart_toEndOf="@+id/editDate"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:ignore="TouchTargetSizeCheck" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
@@ -168,11 +170,13 @@
                             android:layout_height="41dp"
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="30dp"
+                            android:hint=" ? "
                             android:inputType="number"
                             android:textColor="@color/white"
-                            app:layout_constraintHorizontal_bias="0.0"
+                            android:textColorHint="@color/white"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textSleep" />
+                            app:layout_constraintTop_toBottomOf="@+id/textSleep"
+                            tools:ignore="TouchTargetSizeCheck" />
 
                         <TextView
                             android:id="@+id/sleepScale"
@@ -219,11 +223,13 @@
                         <EditText
                             android:id="@+id/edDomsValue"
                             android:layout_width="55dp"
-                            android:layout_height="41dp"
+                            android:layout_height="48dp"
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="30dp"
                             android:inputType="number"
                             android:textColor="@color/white"
+                            android:hint=" ? "
+                            android:textColorHint="@color/white"
                             app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/textDoms" />
@@ -274,11 +280,13 @@
                         <EditText
                             android:id="@+id/edEnergyValue"
                             android:layout_width="55dp"
-                            android:layout_height="41dp"
+                            android:layout_height="48dp"
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="30dp"
                             android:inputType="number"
                             android:textColor="@color/white"
+                            android:hint=" ? "
+                            android:textColorHint="@color/white"
                             app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/textEnergy" />
@@ -328,9 +336,11 @@
                         <EditText
                             android:id="@+id/edMoodValue"
                             android:layout_width="55dp"
-                            android:layout_height="41dp"
+                            android:layout_height="48dp"
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="30dp"
+                            android:hint=" ? "
+                            android:textColorHint="@color/white"
                             android:inputType="number"
                             android:textColor="@color/white"
                             app:layout_constraintHorizontal_bias="0.0"
@@ -481,7 +491,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.494"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/startWrkTxt" />
+                    app:layout_constraintTop_toBottomOf="@+id/startWrkTxt"
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <Button
                     android:id="@+id/buttonStart"

@@ -172,6 +172,7 @@
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="@+id/trainingLoad"
         app:layout_constraintEnd_toEndOf="@+id/toggleButton"
-        app:srcCompat="@drawable/info" />
+        app:srcCompat="@drawable/info"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

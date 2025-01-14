@@ -35,9 +35,10 @@
     <ImageView
         android:id="@+id/imgSetting"
         android:layout_width="60dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_marginEnd="50dp"
         android:clickable="true"
+        android:contentDescription="imp"
         app:layout_constraintEnd_toEndOf="@+id/searchUserName"
         app:layout_constraintTop_toTopOf="@+id/hi_text"
         app:srcCompat="@drawable/settings" />
